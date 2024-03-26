@@ -8,6 +8,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as z from "zod";
 
 const formSchema = z.object({
@@ -29,10 +30,11 @@ const CreateCoursePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/course", values)
+      const response = await axios.post("/api/courses", values)
       router.push(`/teacher/courses/${response.data.id}`)
+      toast.success("Cours crée avec succès !")
     } catch {
-      console.log("Une erreur s'est produite")
+      toast.error("Une erreur inattendue s'est produite")
     }
   }
 
@@ -40,7 +42,7 @@ const CreateCoursePage = () => {
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
         <h1>Titre de votre cours</h1>
-        <p className="text-sm text-slate-600">Comment voulez vous appeler votre cours ? Vous pouvez le changer plus tard</p>
+        <p className="text-sm text-slate-600">Comment voulez vous appeler votre cours ? Vous pouvez changer ce nom plus tard</p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

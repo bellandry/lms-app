@@ -35,7 +35,7 @@ const teacherRoute = [
   }
 ]
 
-export const SidebarRoutes = () => {
+export const NavbarRoute = () => {
   const pathName = usePathname()
 
   const isTeacherMode = pathName?.includes("/teacher")
@@ -43,7 +43,7 @@ export const SidebarRoutes = () => {
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 
   return (
-    <div className="flex flex-col w-full gap-y-2 mt-2">
+    <div className="hidden md:flex ml-auto">
       {
         routes.map((route) => (
           <SidebarItem

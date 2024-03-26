@@ -1,3 +1,6 @@
+"use client"
+
+import { usePathname } from "next/navigation";
 import { Navbar } from "./_components/navbar";
 import { Sidebar } from "./_components/sidebar";
 
@@ -6,15 +9,17 @@ const DashboardLayout = (
     children: React.ReactNode
   }
 ) => {
+  const pathName = usePathname()
+  const isTeacherMode = pathName?.includes("/teacher")
   return (
     <div className="h-screen">
-      <div className="h-[70px] md:pl-56 fixed inset-y-0 w-full z-50">
+      <div className="h-[70px] fixed inset-y-0 w-full z-50">
         <Navbar />
       </div>
-      <div className="hidden md:flex h-screen w-56 flex-col fixed inset-y-0 z-50">
+      {isTeacherMode && <div className="hidden md:pt-[70px] md:flex h-screen w-64 flex-col fixed inset-y-0 z-50 pt-2">
         <Sidebar />
-      </div>
-      <main className="md:pl-56 pt-[70px] h-hull">
+      </div>}
+      <main className="md:pl-64 pt-[70px] h-hull">
         {children}
       </main>
     </div>
