@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Course } from "@prisma/client"
+import { Chapter } from "@prisma/client"
 import axios from "axios"
 import { Pencil } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -14,9 +14,10 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from "zod"
 
-interface DescriptionFormProps {
-  initialData: Course
+interface ChapterDescriptionFormProps {
+  initialData: Chapter
   courseId: string
+  chapterId: string
 }
 
 const formSchema = z.object({
@@ -25,10 +26,11 @@ const formSchema = z.object({
   })
 })
 
-export const DescriptionForm = ({
+export const ChapterDescriptionForm = ({
   initialData,
-  courseId
-}: DescriptionFormProps) => {
+  courseId,
+  chapterId
+}: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const toggleEdit = () => {
@@ -48,7 +50,7 @@ export const DescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values)
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
       toast.success("Description mise à jour !")
       toggleEdit()
       router.refresh()
@@ -60,7 +62,7 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Description du cours
+        Description du chapitre
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? "Cancel" :
             <>
@@ -71,12 +73,12 @@ export const DescriptionForm = ({
         </Button>
       </div>
       {!isEditing ?
-        <p className={cn(
+        <div className={cn(
           "text-sm mt-2",
           !initialData.description && "text-slate-500 italic"
         )}>
           {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}
-        </p> :
+        </div> :
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

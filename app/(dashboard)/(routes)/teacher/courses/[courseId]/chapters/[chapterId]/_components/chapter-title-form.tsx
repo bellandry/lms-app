@@ -1,11 +1,9 @@
 "use client"
-import { Editor } from "@/components/editor"
-import { Preview } from "@/components/preview"
+
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Course } from "@prisma/client"
 import axios from "axios"
 import { Pencil } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -14,21 +12,25 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from "zod"
 
-interface DescriptionFormProps {
-  initialData: Course
+interface ChapterTitleFormProps {
+  initialData: {
+    title: string
+  }
   courseId: string
+  chapterId: string
 }
 
 const formSchema = z.object({
-  description: z.string().min(50, {
-    message: "La description doit contenir au moins 50 caractères"
+  title: z.string().min(4, {
+    message: "Le titre doit contenir au moins 4 caractères"
   })
 })
 
-export const DescriptionForm = ({
+export const ChapterTitleForm = ({
   initialData,
-  courseId
-}: DescriptionFormProps) => {
+  courseId,
+  chapterId
+}: ChapterTitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const toggleEdit = () => {
@@ -39,17 +41,15 @@ export const DescriptionForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      description: initialData?.description || ""
-    }
+    defaultValues: initialData
   })
 
   const { isSubmitting, isValid } = form.formState
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values)
-      toast.success("Description mise à jour !")
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+      toast.success("Titre mis à jour !")
       toggleEdit()
       router.refresh()
     } catch {
@@ -60,22 +60,19 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Description du cours
+        Titre du Chapitre
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? "Cancel" :
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier la description
+              Modifier le titre
             </>
           }
         </Button>
       </div>
       {!isEditing ?
-        <p className={cn(
-          "text-sm mt-2",
-          !initialData.description && "text-slate-500 italic"
-        )}>
-          {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}
+        <p className="text-sm mt-2">
+          {initialData.title}
         </p> :
         <Form {...form}>
           <form
@@ -84,11 +81,13 @@ export const DescriptionForm = ({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Editor
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Ex: 'Premier chapitre'"
                       {...field}
                     />
                   </FormControl>

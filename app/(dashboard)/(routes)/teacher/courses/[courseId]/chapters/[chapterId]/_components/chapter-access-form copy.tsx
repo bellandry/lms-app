@@ -1,11 +1,10 @@
 "use client"
-import { Editor } from "@/components/editor"
-import { Preview } from "@/components/preview"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Form, FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Course } from "@prisma/client"
+import { Chapter } from "@prisma/client"
 import axios from "axios"
 import { Pencil } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -14,21 +13,21 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from "zod"
 
-interface DescriptionFormProps {
-  initialData: Course
+interface ChapterAccessFormProps {
+  initialData: Chapter
   courseId: string
+  chapterId: string
 }
 
 const formSchema = z.object({
-  description: z.string().min(50, {
-    message: "La description doit contenir au moins 50 caractères"
-  })
+  isFree: z.boolean().default(false)
 })
 
-export const DescriptionForm = ({
+export const ChapterAccessForm = ({
   initialData,
-  courseId
-}: DescriptionFormProps) => {
+  courseId,
+  chapterId
+}: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const toggleEdit = () => {
@@ -40,7 +39,7 @@ export const DescriptionForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || ""
+      isFree: Boolean(initialData?.isFree)
     }
   })
 
@@ -48,7 +47,7 @@ export const DescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values)
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
       toast.success("Description mise à jour !")
       toggleEdit()
       router.refresh()
@@ -60,12 +59,12 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Description du cours
+        Accès au chapitre
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? "Cancel" :
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier la description
+              Modifier l'accès
             </>
           }
         </Button>
@@ -73,9 +72,9 @@ export const DescriptionForm = ({
       {!isEditing ?
         <p className={cn(
           "text-sm mt-2",
-          !initialData.description && "text-slate-500 italic"
+          !initialData.isFree && "text-slate-500 italic"
         )}>
-          {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}
+          {initialData.isFree ? "Ce Chapitre est gratuit pour la prévisualisation" : "Ce chapitre est en accès payant"}
         </p> :
         <Form {...form}>
           <form
@@ -84,15 +83,20 @@ export const DescriptionForm = ({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-center space-y-0 space-x-3 rounded-md border p-4">
                   <FormControl>
-                    <Editor
-                      {...field}
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                      Cochez cette case pour rendre le chapitre gratuit en prévisualisation
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
