@@ -71,12 +71,12 @@ export const DescriptionForm = ({
         </Button>
       </div>
       {!isEditing ?
-        <p className={cn(
+        <div className={cn(
           "text-sm mt-2",
           !initialData.description && "text-slate-500 italic"
         )}>
           {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}
-        </p> :
+        </div> :
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

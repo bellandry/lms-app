@@ -1,6 +1,7 @@
 "use client"
 import { FileUpload } from "@/components/file-upload"
 import { Button } from "@/components/ui/button"
+import VideoPlayer from "@/components/video-player"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Chapter, MuxData } from "@prisma/client"
 import axios from "axios"
@@ -82,7 +83,9 @@ export const ChapterVideoForm = ({
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            Vidéo mise en ligne
+            <VideoPlayer
+              videoUrl={initialData.videoUrl}
+            />
           </div>
         )
       ) : (
