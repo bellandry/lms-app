@@ -2,13 +2,34 @@ import { SearchInput } from "@/components/search-input";
 import { db } from "@/lib/db";
 import { HeroSection } from "../../_components/hero";
 import { Categories } from "./_components/categories";
+import { getCourses } from "@/actions/get-courses";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { CoursesList } from "@/components/courses-list";
 
-const SearchPage = async () => {
+interface SearchPageProps {
+  searchParams: {
+    title: string,
+    categoryId: string
+  }
+}
+
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const { userId } = auth()
+
+  if (!userId) return redirect("/")
+
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc"
+      name: "asc" 
     }
   })
+
+  const courses = await getCourses({
+    userId,
+    ...searchParams
+  })
+
   return (
     <>
       <HeroSection />
@@ -19,6 +40,9 @@ const SearchPage = async () => {
         <Categories
           items={categories}
         />
+      </div>
+      <div className="w-full md:w-4/5 p-4  rounded-md mx-auto flex flex-col gap-4">
+        <CoursesList items={courses} />
       </div>
     </>
   );
