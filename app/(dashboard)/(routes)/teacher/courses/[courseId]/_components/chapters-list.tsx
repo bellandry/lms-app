@@ -85,9 +85,7 @@ export const ChaptersList = ({ items, onEdit, onReorder }: ChaptersListProps) =>
                     {chapter.title}
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
                       {chapter.isFree && (
-                        <Badge
-                          className="py-1 px-2"
-                          variant="secondary">
+                        <Badge>
                           Gratuit
                         </Badge>
                       )}

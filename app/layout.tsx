@@ -1,3 +1,4 @@
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
 import { ToastProvider } from "@/components/providers/toaster-providers";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -21,6 +22,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <ToastProvider />
+          <ConfettiProvider />
           {children}
         </body>
       </html>

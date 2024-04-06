@@ -42,7 +42,7 @@ const CreateCoursePage = () => {
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
         <h1>Titre de votre cours</h1>
-        <p className="text-sm text-slate-600">Comment voulez vous appeler votre cours ? Vous pouvez changer ce nom plus tard</p>
+        <p className="text-sm text-slate-600">Comment voulez vous appeler votre cours ? Vous pourrez changer ce nom plus tard</p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

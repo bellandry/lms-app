@@ -1,5 +1,6 @@
 "use client"
 
+import { SearchInput } from "@/components/search-input"
 import { BarChart, BookCopy, Compass, Layout, List } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { SidebarItem } from "./sidebar-item"
@@ -39,21 +40,29 @@ export const NavbarRoute = () => {
   const pathName = usePathname()
 
   const isTeacherMode = pathName?.includes("/teacher")
+  const isSearchPage = pathName?.includes("/search")
 
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 
   return (
-    <div className="hidden md:flex ml-auto">
-      {
-        routes.map((route) => (
-          <SidebarItem
-            key={route.href}
-            icone={route.icon}
-            label={route.label}
-            href={route.href}
-          />
-        ))
-      }
-    </div>
+    <>
+      {isSearchPage && (
+        <div className="hidden md:flex">
+          <SearchInput />
+        </div>
+      )}
+      <div className="hidden md:flex ml-auto">
+        {
+          routes.map((route) => (
+            <SidebarItem
+              key={route.href}
+              icone={route.icon}
+              label={route.label}
+              href={route.href}
+            />
+          ))
+        }
+      </div>
+    </>
   )
 }

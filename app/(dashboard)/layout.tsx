@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Navbar } from "./_components/navbar";
 import { Sidebar } from "./_components/sidebar";
@@ -19,7 +20,7 @@ const DashboardLayout = (
       {isTeacherMode && <div className="hidden md:pt-[70px] md:flex h-screen w-64 flex-col fixed inset-y-0 z-50 pt-2">
         <Sidebar />
       </div>}
-      <main className="md:pl-64 pt-[70px] h-hull">
+      <main className={cn("pt-[70px] h-hull", isTeacherMode && "md:pl-64")}>
         {children}
       </main>
     </div>
