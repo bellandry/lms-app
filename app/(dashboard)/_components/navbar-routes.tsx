@@ -46,11 +46,11 @@ export const NavbarRoute = () => {
 
   return (
     <>
-      {isSearchPage && (
-        <div className="hidden md:flex">
-          <SearchInput />
-        </div>
-      )}
+      {/* {isSearchPage && ( */}
+      <div className="hidden md:flex">
+        <SearchInput />
+      </div>
+      {/* )} */}
       <div className="hidden md:flex ml-auto">
         {
           routes.map((route) => (

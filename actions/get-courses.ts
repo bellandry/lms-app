@@ -15,40 +15,40 @@ type GetCourses = {
 	categoryId: string
 }
 
-export const getCourses = async ({userId, title, categoryId}: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
+export const getCourses = async ({ userId, title, categoryId }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
 	try {
 		const courses = await db.course.findMany({
 			where: {
-					isPublished: true,
-					title: {
-							contains: title
-					},
-					categoryId: {}
+				isPublished: true,
+				title: {
+					contains: title
+				},
+				categoryId,
 			},
 			include: {
-					category: true,
-					chapters: {
-							where: {
-									isPublished: true
-							},
-							select: {
-									id: true
-							}
+				category: true,
+				chapters: {
+					where: {
+						isPublished: true
 					},
-					purchases: {
-							where: {
-									userId
-							}
+					select: {
+						id: true
 					}
+				},
+				purchases: {
+					where: {
+						userId
+					}
+				}
 			},
 			orderBy: {
-					createdAt: "desc"
+				createdAt: "desc"
 			}
 		})
 
 		const courseWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
 			courses.map(async course => {
-				if(course.purchases.length === 0) {
+				if (course.purchases.length === 0) {
 					return {
 						...course,
 						progress: null
@@ -60,12 +60,12 @@ export const getCourses = async ({userId, title, categoryId}: GetCourses): Promi
 				return {
 					...course,
 					progress: progressPercentage
-			}
+				}
 			})
 		)
 
 		return courseWithProgress
-	} catch(error) {
+	} catch (error) {
 		console.log("[GET_COURSES]", error)
 		return []
 	}

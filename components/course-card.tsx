@@ -1,10 +1,10 @@
 "use client"
 
+import { formatPrice } from "@/lib/format"
 import { BookOpen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { IconBadge } from "./icon-badge"
-import { formatPrice } from "@/lib/format"
 
 interface CourseCardProps {
   id: string
@@ -20,8 +20,8 @@ interface CourseCardProps {
 export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progress, category }: CourseCardProps) => {
   return (
     <Link href={`/course/${id}`}>
-      <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
-        <div className="relative w-full aspect-video rounded-md overflow-hidden">
+      <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg h-full">
+        <div className="relative w-full aspect-video overflow-hidden">
           <Image
             fill
             className="object-cover"
@@ -29,7 +29,7 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
             src={imageUrl}
           />
         </div>
-        <div className="flex flex-col pt-2">
+        <div className="flex flex-col p-3">
           <div className="text-lg font-semibold group-hover:text-sky-800 transition line-clamp-2">
             {title}
           </div>
