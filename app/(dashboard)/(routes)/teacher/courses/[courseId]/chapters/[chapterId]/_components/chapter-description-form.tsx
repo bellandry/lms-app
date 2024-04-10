@@ -1,4 +1,5 @@
 "use client"
+
 import { Editor } from "@/components/editor"
 import { Preview } from "@/components/preview"
 import { Button } from "@/components/ui/button"
@@ -74,7 +75,7 @@ export const ChapterDescriptionForm = ({
       </div>
       {!isEditing ?
         <div className={cn(
-          "text-sm mt-2",
+          "text-sm mt-2 max-h-96 overflow-y-auto",
           !initialData.description && "text-slate-500 italic"
         )}>
           {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}

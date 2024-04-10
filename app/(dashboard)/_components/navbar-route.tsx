@@ -41,6 +41,7 @@ export const NavbarRoute = () => {
 
   const isTeacherMode = pathName?.includes("/teacher")
   const isSearchPage = pathName?.includes("/search")
+  const isPlayerPage = pathName?.includes("/course")
 
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 

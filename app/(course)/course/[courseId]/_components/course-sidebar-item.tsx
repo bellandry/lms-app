@@ -20,7 +20,7 @@ export const CourseSidebarItem = ({ id, label, isCompleted, isLocked, courseId }
   const isActive = pathName.includes(id)
 
   const onClick = () => {
-    router.push(`/course/${courseId}/chapters/${id}`)
+    router.push(`/course/${courseId}/chapter/${id}`)
   }
 
   return (

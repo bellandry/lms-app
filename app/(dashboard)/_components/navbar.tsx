@@ -2,7 +2,7 @@ import { NavbarRoutes } from "@/components/navbar-routes";
 import { usePathname } from "next/navigation";
 import { Logo } from "./logo";
 import { MobileSidebar } from "./mobile-sidebar";
-import { NavbarRoute } from "./navbar-routes";
+import { NavbarRoute } from "./navbar-route";
 
 export const Navbar = () => {
   const pathName = usePathname()

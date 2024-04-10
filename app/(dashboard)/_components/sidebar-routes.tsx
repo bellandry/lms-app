@@ -39,7 +39,6 @@ export const SidebarRoutes = () => {
   const pathName = usePathname()
 
   const isTeacherMode = pathName?.includes("/teacher")
-  const isSearchPage = pathName?.includes("/search")
 
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 
