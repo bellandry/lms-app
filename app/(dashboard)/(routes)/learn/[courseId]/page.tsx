@@ -53,7 +53,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   // return redirect(`/course/${course.id}/chapter/${course.chapters[0].id}`)
   return (
-    <div className="w-full flex flex-col md:flex-row justify-evenly md:px-28 lg:px-40">
+    <div className="w-full flex flex-col-reverse md:flex-row justify-evenly md:px-28 lg:px-40">
       <div className="flex flex-col w-full h-fit md:w-3/5 mx-auto p-2 md:m-2 gap-2 border rounded-lg">
         <h1 className="text-2xl md:text-4xl font-bold">{course.title}</h1>
         <Preview value={course.description ?? ""} />
