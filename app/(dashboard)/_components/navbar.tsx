@@ -1,8 +1,8 @@
 import { NavbarRoutes } from "@/components/navbar-routes";
 import { usePathname } from "next/navigation";
-import { Logo } from "./logo";
 import { MobileSidebar } from "./mobile-sidebar";
 import { NavbarRoute } from "./navbar-route";
+import Logo from "@/components/logo";
 
 export const Navbar = () => {
   const pathName = usePathname()

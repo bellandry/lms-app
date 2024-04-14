@@ -11,6 +11,7 @@ import { ChapterAttachmentForm } from "./_components/chapter-attachment-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
+import { ChapterContentForm } from "./_components/chapter-content-form";
 
 const ChaptersIdPage = async ({
   params
@@ -102,6 +103,11 @@ const ChaptersIdPage = async ({
                   chapterId={params.chapterId}
                 />
                 <ChapterDescriptionForm
+                  initialData={chapter}
+                  courseId={params.courseId}
+                  chapterId={params.chapterId}
+                />
+                <ChapterContentForm
                   initialData={chapter}
                   courseId={params.courseId}
                   chapterId={params.chapterId}

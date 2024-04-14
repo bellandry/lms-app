@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { IconBadge } from "./icon-badge"
+import { Badge } from "./ui/badge"
 
 interface CourseCardProps {
   id: string
@@ -19,8 +20,8 @@ interface CourseCardProps {
 
 export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progress, category }: CourseCardProps) => {
   return (
-    <Link href={`/course/${id}`}>
-      <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg h-full">
+    <Link href={`/learn/${id}`}>
+      <div className="group hover:shadow-md transition overflow-hidden border rounded-lg h-full">
         <div className="relative w-full aspect-video overflow-hidden">
           <Image
             fill
@@ -33,7 +34,7 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
           <div className="text-lg font-semibold group-hover:text-sky-800 transition line-clamp-2">
             {title}
           </div>
-          <p className="text-xs textt-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {category}
           </p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
@@ -50,7 +51,11 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
             </div>
           ) : (
             <p className="text-md md:text-sm font-semibold text-slate-800">
-              {formatPrice(price)}
+              {price ? formatPrice(price) : (
+                <Badge className="bg-gray-700 ml-auto">
+                  Gratuit
+                </Badge>
+              )}
             </p>
           )}
         </div>

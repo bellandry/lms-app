@@ -39,11 +39,7 @@ const teacherRoute = [
   }
 ]
 
-export const SidebarRoutes = (props: any) => {
-  const [SheetCloseWrapper, sheetCloseWrapperProps] = props.withSheetClose
-    ? [SheetClose, { asChild: true }]
-    : [React.Fragment, {}];
-
+export const SidebarRoutes = () => {
   const pathName = usePathname()
 
   const isTeacherMode = pathName?.includes("/teacher")
@@ -54,14 +50,12 @@ export const SidebarRoutes = (props: any) => {
     <div className="flex flex-col w-full gap-y-2 mt-2">
       {
         routes.map((route) => (
-        <SheetCloseWrapper {...sheetCloseWrapperProps} key={route.href}>
           <SidebarItem
             key={route.href}
             icone={route.icon}
             label={route.label}
             href={route.href}
           />
-        </SheetCloseWrapper>
         ))
       }
     </div>

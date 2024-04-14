@@ -1,7 +1,6 @@
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 import { Preview } from "@/components/preview";
-import { Separator } from "@/components/ui/separator";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { ChapterVideoPlayer } from "./_components/chapter-video-player";
@@ -49,13 +48,16 @@ const ChapterIdPage = async ({ params }: { params: { courseId: string, chapterId
           variant="warning"
         />
       )}
-      <div className="flex flex-col max-w-4xl mx-auto pb-20 p-2 md:p-4 gap-2">
+      <div className="flex flex-col max-w-3xl mx-auto pb-20 p-2 md:p-4 gap-2">
         <h1 className="text-2xl md:text-4xl font-bold">{chapter.title}</h1>
         <Preview value={chapter.description ?? ""} />
         <ChapterVideoPlayer
           isLocked={isLocked}
           chapter={chapter}
         />
+        {!isLocked && (
+          <Preview value={chapter.content ?? ""} />
+        )}
         {purchase ? (
           <div>
 
@@ -67,7 +69,6 @@ const ChapterIdPage = async ({ params }: { params: { courseId: string, chapterId
           />
         )}
       </div>
-      <Separator />
       <div>
 
       </div>

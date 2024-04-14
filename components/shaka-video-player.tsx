@@ -42,7 +42,7 @@ const ShakaVideoPlayer = ({ videoUrl, className, onReady }: ShakaVideoPlayerProp
 
     initPlayer();
     onReady()
-
+    
     return () => {
       if (videoRef.current) {
         const player = new shaka.Player(videoRef.current);

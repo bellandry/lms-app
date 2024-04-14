@@ -27,7 +27,7 @@ export const CourseSidebarItem = ({ id, label, isCompleted, isLocked, courseId }
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-x-2 text-slate-600 text-sm font-[500] pl-6 transition-all hover:text-slate-700 hover:bg-slate-300/20",
+        "flex items-center gap-x-2 text-slate-600 text-sm font-[500] pl-6 transition-all hover:text-slate-700 hover:bg-slate-300/50",
         isActive && "text-slate-800 bg-slate-200/20 hover:bg-slate-300/20 hover:text-slate-800",
         isCompleted && "text-emerald-800 hover:text-emerald-900",
         isCompleted && isActive && "bg-emerald-300/20"
