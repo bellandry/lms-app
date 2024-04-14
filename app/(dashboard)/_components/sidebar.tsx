@@ -1,4 +1,5 @@
-import { Logo } from "./logo";
+
+import Logo from "@/components/logo";
 import { SidebarRoutes } from "./sidebar-routes";
 
 export const Sidebar = () => {
