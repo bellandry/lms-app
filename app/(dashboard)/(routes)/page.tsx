@@ -30,7 +30,7 @@ const Home = async ({ searchParams }: HomeProps) => {
 
   return (
     <>
-        <HeroSection />
+      <HeroSection />
       <div className="p-6 flex items-center">
         <Categories
           items={categories}

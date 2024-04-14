@@ -18,10 +18,13 @@ export const SearchInput = () => {
   const router = useRouter()
 
   const currentCategoryId = searchParams.get("categoryId")
+  const isSearchPage = pathName?.includes("/search")
 
   useEffect(() => {
+    let currentUrl = pathName
+    if(!isSearchPage) currentUrl = "/search"
     const url = qs.stringifyUrl({
-      url: pathName,
+      url: currentUrl,
       query: {
         categoryId: currentCategoryId,
         title: debouncedValue

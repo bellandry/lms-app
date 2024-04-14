@@ -72,7 +72,7 @@ export const DescriptionForm = ({
       </div>
       {!isEditing ?
         <div className={cn(
-          "text-sm mt-2",
+          "text-sm mt-2 max-h-96 overflow-y-auto",
           !initialData.description && "text-slate-500 italic"
         )}>
           {initialData.description ? <Preview value={initialData.description} /> : "Aucune description pour le moment"}

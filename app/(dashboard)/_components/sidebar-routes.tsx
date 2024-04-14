@@ -1,8 +1,12 @@
 "use client"
 
 import { BarChart, BookCopy, Compass, Layout, List } from "lucide-react"
+import React from "react";
+
 import { usePathname } from "next/navigation"
 import { SidebarItem } from "./sidebar-item"
+import { SheetClose } from "@/components/ui/sheet";
+
 
 const guestRoutes = [
   {
@@ -35,11 +39,14 @@ const teacherRoute = [
   }
 ]
 
-export const SidebarRoutes = () => {
+export const SidebarRoutes = (props: any) => {
+  const [SheetCloseWrapper, sheetCloseWrapperProps] = props.withSheetClose
+    ? [SheetClose, { asChild: true }]
+    : [React.Fragment, {}];
+
   const pathName = usePathname()
 
   const isTeacherMode = pathName?.includes("/teacher")
-  const isSearchPage = pathName?.includes("/search")
 
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 
@@ -47,12 +54,14 @@ export const SidebarRoutes = () => {
     <div className="flex flex-col w-full gap-y-2 mt-2">
       {
         routes.map((route) => (
+        <SheetCloseWrapper {...sheetCloseWrapperProps} key={route.href}>
           <SidebarItem
             key={route.href}
             icone={route.icon}
             label={route.label}
             href={route.href}
           />
+        </SheetCloseWrapper>
         ))
       }
     </div>

@@ -41,15 +41,16 @@ export const NavbarRoute = () => {
 
   const isTeacherMode = pathName?.includes("/teacher")
   const isSearchPage = pathName?.includes("/search")
+  const isPlayerPage = pathName?.includes("/course")
 
   const routes = isTeacherMode ? teacherRoute : guestRoutes
 
   return (
     <>
       {isSearchPage && (
-        <div className="hidden md:flex">
-          <SearchInput />
-        </div>
+      <div className="hidden md:flex">
+        <SearchInput />
+      </div>
       )}
       <div className="hidden md:flex ml-auto">
         {

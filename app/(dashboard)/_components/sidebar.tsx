@@ -8,7 +8,7 @@ export const Sidebar = () => {
         <Logo />
       </div>
       <div className="flex flex-col w-full">
-        <SidebarRoutes />
+        <SidebarRoutes withSheetClose />
       </div>
     </div>
   );
