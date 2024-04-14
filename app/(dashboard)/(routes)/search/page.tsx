@@ -15,9 +15,9 @@ interface SearchPageProps {
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const { userId } = auth()
+  let { userId } = auth()
 
-  if (!userId) return redirect("/")
+  if (!userId) userId = ""
 
   const categories = await db.category.findMany({
     orderBy: {
@@ -32,7 +32,6 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
 
   return (
     <>
-      <HeroSection />
       <div className="block px-6 pt-6 md:hidden md:mb-0">
         <SearchInput />
       </div>

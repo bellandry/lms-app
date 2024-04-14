@@ -19,12 +19,15 @@ export const CategoryItem = ({ label, icon: Icon, value }: CategoryItemProps) =>
 
   const currentCategoryId = searchParams.get("categoryId")
   const currentTitle = searchParams.get("title")
+  const isSearchPage = pathName?.includes("/search")
 
   const isSelected = currentCategoryId === value
 
   const onClick = () => {
+    let currentUrl = pathName
+    if(!isSearchPage) currentUrl = "/search"
     const url = qs.stringifyUrl({
-      url: pathName,
+      url: currentUrl,
       query: {
         title: currentTitle,
         categoryId: isSelected ? null : value

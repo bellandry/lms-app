@@ -37,7 +37,7 @@ export const getCourses = async ({userId, title, categoryId}: GetCourses): Promi
 					},
 					purchases: {
 							where: {
-									userId
+									userId: {}
 							}
 					}
 			},
