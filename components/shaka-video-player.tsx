@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
 
 import 'shaka-player/dist/controls.css';
+import { Fullscreen } from 'lucide-react';
 
 interface ShakaVideoPlayerProps {
   videoUrl: string;
@@ -24,17 +25,19 @@ const ShakaVideoPlayer = ({ videoUrl, className, onReady }: ShakaVideoPlayerProp
         const ui = new shaka.ui.Overlay(player, videoContainerRef.current, videoRef.current);
 
         const config = {
+          controlPanelElements: ['play_pause','time_and_duration', 'rewind', 'fast_forward', 'spacer', 'mute', 'volume', 'quality', 'overflow_menu', 'fullscreen'],
           addSeekBar: true,
           overflowMenuButtons: ['cast'],
           enableTooltips: true,
           seekBarColors: {
             base: 'rgba(255, 255, 255, 0.3)',
-            buffered: 'rgba(255, 0, 0, 0.2)',
+            buffered: 'rgba(255, 255, 255, 0.6)',
             played: 'red',
           },
         };
-        ui.configure(config);
-        await player.load(videoUrl);
+        ui.configure(config)
+        ui.getControls()
+        await player.load(videoUrl)
       } else {
         console.error('Navigateur non supporté par Shaka Player');
       }

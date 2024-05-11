@@ -1,28 +1,52 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { db } from "@/lib/db"
 import { formatPrice } from "@/lib/format"
-import { redirect } from "next/navigation"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import toast from "react-hot-toast"
 
 interface CourseEnrollButtonProps {
   price: number
   courseId: string
   className?: string
-  chapterId?: string
+  variant: string
 }
 
-export const CourseEnrollButton = ({ price, courseId, className, chapterId }: CourseEnrollButtonProps) => {
-  const onClick = () => {
-    return redirect(`/course/${courseId}/chapter/${chapterId}`)
+export const CourseEnrollButton = ({ price, courseId, className, variant }: CourseEnrollButtonProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  const onClick = async () => {
+    try {
+      setIsLoading(true)
+
+      if(price === 0 || price === null) {
+        await axios.post(`/api/enroll/${courseId}`)
+        toast.success('Félicitaions! Vous suivez désormais ce cours')
+        router.refresh()
+      }else{
+        const response = await axios.post(`/api/courses/${courseId}/checkout`)
+
+        window.location.assign(response.data.url)
+      }
+    } catch {
+      toast.error("Une erreur inatendue s'est produite")
+    } finally {
+      setIsLoading(false)
+    }
   }
-  
+
   return (
     <Button 
-      variant="secondary" 
+      variant={variant as "link" | "default" | "secondary" | "destructive" | "outline" | "ghost"}
       className={`w-full md:w-auto ${className}`}
-      onClick={() => onClick()}
+      onClick={onClick}
+      disabled={isLoading}
       >
-      Suivre ce cours {price !== 0 && formatPrice(price)}
+      Suivre ce cours {price !== 0 && price !== null && formatPrice(price)}
     </Button>
   )
 }

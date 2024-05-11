@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { IconBadge } from "./icon-badge"
 import { Badge } from "./ui/badge"
+import { CourseProgress } from "./course-progress"
 
 interface CourseCardProps {
   id: string
@@ -31,12 +32,6 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
           />
         </div>
         <div className="flex flex-col p-3">
-          <div className="text-lg font-semibold group-hover:text-sky-800 transition line-clamp-2">
-            {title}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {category}
-          </p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
@@ -45,18 +40,28 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
               </span>
             </div>
           </div>
+          <div className="text-lg font-semibold group-hover:text-sky-900 transition-all line-clamp-2">
+            {title}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {category}
+          </p>
           {progress !== null ? (
-            <div>
-              Progress Component
+            <div className="mt-4">
+              <CourseProgress 
+                value={progress} 
+                size="sm"
+                variant={progress === 100 ? 'success' : 'default'}
+              />
             </div>
           ) : (
-            <p className="text-md md:text-sm font-semibold text-slate-800">
+            <div className="text-md md:text-sm font-semibold text-slate-800 mt-2">
               {price ? formatPrice(price) : (
                 <Badge className="bg-gray-700 ml-auto">
                   Gratuit
                 </Badge>
               )}
-            </p>
+            </div>
           )}
         </div>
       </div>

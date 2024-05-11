@@ -1,5 +1,6 @@
 import { CourseSidebarItem } from "@/app/(course)/course/[courseId]/_components/course-sidebar-item";
 import { CourseEnrollButton } from "@/app/(course)/course/[courseId]/chapter/[chapterId]/_components/course-enroll-button";
+import { CourseProgress } from "@/components/course-progress";
 import { IconBadge } from "@/components/icon-badge";
 import { Preview } from "@/components/preview";
 import { db } from "@/lib/db";
@@ -107,11 +108,13 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <li>Partage de ressources et de codes</li>
               <li>Exercices pratiques intégrés</li>
             </ul>
-            <CourseEnrollButton
-              chapterId={course.chapters[0].id}
-              courseId={params.courseId}
-              price={course.price ?? 0}
-            />
+            {!purchase && (
+              <CourseEnrollButton
+                variant="secondary"
+                courseId={params.courseId}
+                price={course.price ?? 0}
+              />
+            )}
           </div>
         </div>
       </div>

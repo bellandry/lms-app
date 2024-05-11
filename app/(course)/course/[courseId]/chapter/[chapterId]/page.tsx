@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { ChapterVideoPlayer } from "./_components/chapter-video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
+import { CourseProgressButton } from "./_components/course-progress-button";
 
 const ChapterIdPage = async ({ params }: { params: { courseId: string, chapterId: string } }) => {
   const { userId } = auth()
@@ -32,13 +33,13 @@ const ChapterIdPage = async ({ params }: { params: { courseId: string, chapterId
   }
 
   const isLocked = !chapter.isFree && !purchase
-  const onCompleteOnEnd = !!purchase && !userProgress?.isCompleted
+  const oompleteOnEnd = !!purchase && !userProgress?.isCompleted
 
   return (
     <div>
       {userProgress?.isCompleted && (
         <Banner
-          label="Vous avez déja suivi et terminé ce cours"
+          label="Vous avez déja suivi et terminé ce chapitre"
           variant="success"
         />
       )}
@@ -55,22 +56,62 @@ const ChapterIdPage = async ({ params }: { params: { courseId: string, chapterId
           isLocked={isLocked}
           chapter={chapter}
         />
+        {!purchase && (
+          <CourseEnrollButton
+            courseId={params.courseId}
+            price={course.price!}
+            variant=""
+          />
+        )}
         {!isLocked && (
           <Preview value={chapter.content ?? ""} />
         )}
-        {purchase ? (
-          <div>
-
-          </div>
-        ) : (
-          <CourseEnrollButton
-            courseId={params.courseId}
-            price={course.price ?? 0}
-          />
+        {!!courseAttachments.length && (
+          <>
+            <div className="p-4">
+              {courseAttachments.map((attachment) => (
+                <a 
+                  href={attachment.url} 
+                  target="_blank" 
+                  key={attachment.id}
+                  className="flex items-center p-3 w-full bg-slate-400 border text-slate-800 rounded-md hover:underline"
+                >
+                  <p>
+                    {attachment.name}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </>
         )}
-      </div>
-      <div>
-
+        {!!chapterAttachments.length && (
+          <>
+            <div className="p-4">
+              {chapterAttachments.map((attachment) => (
+                <a 
+                  href={attachment.url} 
+                  target="_blank" 
+                  key={attachment.id}
+                  className="flex items-center p-3 w-full bg-slate-400 border text-slate-800 rounded-md hover:underline"
+                >
+                  <p>
+                    {attachment.name}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+        {purchase && (
+          <div className="flex justify-end p-4">
+            <CourseProgressButton
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+              nextChapterId={nextChapter?.id}
+              isCompleted={!!userProgress?.isCompleted}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

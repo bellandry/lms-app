@@ -23,6 +23,9 @@ export const getChapter = async ({ userId, courseId, chapterId }: getChapterProp
         id: courseId,
         isPublished: true
       },
+      select: {
+        price: true
+      }
     })
 
     const chapter = await db.chapter.findUnique({
@@ -33,7 +36,7 @@ export const getChapter = async ({ userId, courseId, chapterId }: getChapterProp
     })
 
     if (!course || !chapter) {
-      throw new Error(`Chapitre ou cours inexistant ! csoursId ! ${courseId}, chapterId: ${chapterId}`);
+      throw new Error(`Chapitre ou cours inexistant !`);
     }
 
     let courseAttachments: Attachment[] = []
