@@ -8,7 +8,7 @@ import { SidebarItem } from "./sidebar-item"
 const guestRoutes = [
   {
     icon: Layout,
-    label: "Dashboard",
+    label: "Accueil",
     href: "/"
   },
   {
@@ -16,11 +16,11 @@ const guestRoutes = [
     label: "Explorer",
     href: "/search"
   },
-  {
-    icon: BookCopy,
-    label: "Cours suivis",
-    href: "/courses"
-  },
+  // {
+  //   icon: BookCopy,
+  //   label: "Cours suivis",
+  //   href: "/courses"
+  // },
 ]
 
 const teacherRoute = [

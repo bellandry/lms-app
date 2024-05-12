@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import { HeroSection } from "../_components/hero";
-import { Categories } from "./search/_components/categories";
+import { HeroSection } from "../../_components/hero";
+import { Categories } from "../search/_components/categories";
 import { CoursesList } from "@/components/courses-list";
 import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs";

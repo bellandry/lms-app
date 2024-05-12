@@ -24,7 +24,7 @@ export const CourseEnrollButton = ({ price, courseId, className, variant }: Cour
       setIsLoading(true)
 
       if(price === 0 || price === null) {
-        await axios.post(`/api/enroll/${courseId}`)
+        await axios.post(`/api/courses/${courseId}/enroll`)
         toast.success('Félicitaions! Vous suivez désormais ce cours')
         router.refresh()
       }else{

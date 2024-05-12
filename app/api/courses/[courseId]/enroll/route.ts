@@ -1,13 +1,14 @@
-import Stripe from 'stripe'
-import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
 import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs'
 
 export async function POST(req: Request, { params }: { params: { courseId: string } }) {
   const { userId } = auth()
   const { courseId } = params
+
+  if(!userId) {
+    return new NextResponse('Unauthoried ', { status: 401 })
+  }
 
   const course = await db.course.findUnique({
     where: {
@@ -18,10 +19,6 @@ export async function POST(req: Request, { params }: { params: { courseId: strin
 
   if(!course) {
     return new NextResponse('Course not found', { status: 404 })
-  }
-
-  if(!userId) {
-    return new NextResponse('Unauthoried ', { status: 401 })
   }
 
   const purchase = await db.purchase.findUnique({
@@ -39,8 +36,8 @@ export async function POST(req: Request, { params }: { params: { courseId: strin
 
   const purchaseCourse = await db.purchase.create({
     data: {
+      userId,
       courseId,
-      userId
     }
   })
 

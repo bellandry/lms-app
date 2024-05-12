@@ -11,7 +11,7 @@ import { SheetClose } from "@/components/ui/sheet";
 const guestRoutes = [
   {
     icon: Layout,
-    label: "Dashboard",
+    label: "Accueil",
     href: "/"
   },
   {
@@ -19,11 +19,11 @@ const guestRoutes = [
     label: "Explorer",
     href: "/search"
   },
-  {
-    icon: BookCopy,
-    label: "Cours suivis",
-    href: "/courses"
-  },
+  // {
+  //   icon: BookCopy,
+  //   label: "Cours suivis",
+  //   href: "/dashboard"
+  // },
 ]
 
 const teacherRoute = [
