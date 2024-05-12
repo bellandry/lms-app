@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
 import { formatPrice } from "@/lib/format"
+import { SignedIn } from "@clerk/clerk-react"
+import { SignInButton } from "@clerk/nextjs"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -40,13 +42,15 @@ export const CourseEnrollButton = ({ price, courseId, className, variant }: Cour
   }
 
   return (
-    <Button 
-      variant={variant as "link" | "default" | "secondary" | "destructive" | "outline" | "ghost"}
-      className={`w-full md:w-auto ${className}`}
-      onClick={onClick}
-      disabled={isLoading}
-      >
-      Suivre ce cours {price !== 0 && price !== null && formatPrice(price)}
-    </Button>
+    <SignedIn>
+      <Button 
+        variant={variant as "link" | "default" | "secondary" | "destructive" | "outline" | "ghost"}
+        className={`w-full md:w-auto ${className}`}
+        onClick={onClick}
+        disabled={isLoading}
+        >
+        Suivre ce cours {price !== 0 && price !== null && formatPrice(price)}
+      </Button>
+    </SignedIn>
   )
 }
