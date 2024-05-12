@@ -13,7 +13,6 @@ export const NavbarRoutes = () => {
 
   const isTeacherPage = pathName?.startsWith("/teacher")
   const isPlayerPage = pathName?.includes("/chapter")
-  const isStudentPage = pathName?.startsWith("/dashboard")
 
   return (
     <>
@@ -32,11 +31,13 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         )}
-        <Link href="/dashboard">
-            <Button variant="ghost">
+        { userId && (
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm">
               Dashboard
             </Button>
           </Link>
+        )}
         <UserButton
           afterSignOutUrl="/"
         />

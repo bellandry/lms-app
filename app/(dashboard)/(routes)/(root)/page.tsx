@@ -4,6 +4,7 @@ import { Categories } from "../search/_components/categories";
 import { CoursesList } from "@/components/courses-list";
 import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs";
+import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 
 interface HomeProps {
   searchParams: {

@@ -1,10 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { db } from "@/lib/db"
 import { formatPrice } from "@/lib/format"
-import { SignedIn } from "@clerk/clerk-react"
-import { SignInButton } from "@clerk/nextjs"
+import { SignIn, useAuth } from "@clerk/nextjs"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -20,12 +18,15 @@ interface CourseEnrollButtonProps {
 export const CourseEnrollButton = ({ price, courseId, className, variant }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { userId } = useAuth()
 
   const onClick = async () => {
     try {
       setIsLoading(true)
 
-      if(price === 0 || price === null) {
+      if(!userId){
+        router.push(`/sign-up?redirect_url=${process.env.NEXT_PUBLIC_APP_URL}/learn/${courseId}`)
+      }else if(price === 0 || price === null) {
         await axios.post(`/api/courses/${courseId}/enroll`)
         toast.success('Félicitaions! Vous suivez désormais ce cours')
         router.refresh()
@@ -42,15 +43,13 @@ export const CourseEnrollButton = ({ price, courseId, className, variant }: Cour
   }
 
   return (
-    <SignedIn>
-      <Button 
-        variant={variant as "link" | "default" | "secondary" | "destructive" | "outline" | "ghost"}
-        className={`w-full md:w-auto ${className}`}
-        onClick={onClick}
-        disabled={isLoading}
-        >
-        Suivre ce cours {price !== 0 && price !== null && formatPrice(price)}
-      </Button>
-    </SignedIn>
+    <Button 
+      variant={variant as "link" | "default" | "secondary" | "destructive" | "outline" | "ghost"}
+      className={`w-full md:w-auto ${className}`}
+      onClick={onClick}
+      disabled={isLoading}
+      >
+      Suivre ce cours {price !== 0 && price !== null && formatPrice(price)}
+    </Button>
   )
 }

@@ -1,10 +1,11 @@
 "use client"
 
+import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { CheckCircle, Lock, PlayCircle } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 
-interface CourseSidebarItemProps {
+interface CourseChapterCardProps {
   id: string
   label: string
   isCompleted: boolean
@@ -12,7 +13,7 @@ interface CourseSidebarItemProps {
   isLocked: boolean
 }
 
-export const CourseSidebarItem = ({ id, label, isCompleted, isLocked, courseId }: CourseSidebarItemProps) => {
+export const CourseChapterCard = ({ id, label, isCompleted, isLocked, courseId }: CourseChapterCardProps) => {
   const pathName = usePathname()
   const router = useRouter()
 
@@ -24,15 +25,13 @@ export const CourseSidebarItem = ({ id, label, isCompleted, isLocked, courseId }
   }
 
   return (
-    <button
+    <Card
       onClick={onClick}
       className={cn(
-        "flex items-center gap-x-2 text-slate-600 text-sm font-[500] pl-6 transition-all hover:text-slate-700 hover:bg-slate-300/50",
-        isActive && "text-slate-800 bg-slate-200/20 hover:bg-slate-300/20 hover:text-slate-800",
+        "flex items-center gap-x-2 text-slate-600 text-sm font-[500] pl-6 transition-all hover:text-slate-700 hover:bg-slate-300/50 w-full h-20 justify-center cursor-pointer",
         isCompleted && "text-emerald-800 hover:text-emerald-900",
         isCompleted && isActive && "bg-emerald-300/20"
-      )}
-      type="button">
+      )}>
       <div className="flex items-center gap-x-2 py-4">
         <Icon
           size="22"
@@ -49,6 +48,6 @@ export const CourseSidebarItem = ({ id, label, isCompleted, isLocked, courseId }
         isActive && "opacity-100",
         isCompleted && "border-emerald-700"
       )} />
-    </button>
+    </Card>
   )
 }
