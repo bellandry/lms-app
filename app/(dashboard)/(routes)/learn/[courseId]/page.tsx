@@ -73,24 +73,26 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <Preview value={course.description ?? ""} />
         <div className="flex flex-col w-full px-4 gap-2">
           <h2 className="text-xl md:text-2xl font-semibold">Chapitres</h2>
-          <Carousel>
-            <CarouselContent>
-              {course.chapters.map((chapter) => (
-                <CarouselItem key={chapter.id} className="basis-1/2 md:basis-1/3 pl-2 md:pl-4">
-                  <CourseChapterCard
-                    key={chapter.id}
-                    id={chapter.id}
-                    label={chapter.title}
-                    isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
-                    courseId={course.id}
-                    isLocked={!chapter.isFree && !purchase}
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+          <div className="w-full px-8">
+            <Carousel>
+              <CarouselContent>
+                {course.chapters.map((chapter) => (
+                  <CarouselItem key={chapter.id} className="basis-1/2 md:basis-1/3 pl-2 md:pl-4">
+                    <CourseChapterCard
+                      key={chapter.id}
+                      id={chapter.id}
+                      label={chapter.title}
+                      isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+                      courseId={course.id}
+                      isLocked={!chapter.isFree && !purchase}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
         </div>
       </div>
       <div className="flex flex-col w-full md:h-fit mt-4 md:w-2/5 mx-auto md:m-2 border rounded-lg md:sticky md:top-20">
