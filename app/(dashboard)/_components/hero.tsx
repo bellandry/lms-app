@@ -1,49 +1,82 @@
-'use client'
+"use client";
 
-import DisplayHour from "@/components/display-hour";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export const HeroSection = () => {
-  const isClient = useIsClient()
+  const isClient = useIsClient();
 
-  if(!isClient) {
-    return <p>Loading</p>
+  if (!isClient) {
+    return <p>Loading</p>;
   }
 
-  const { user, isSignedIn } = useUser()
+  const { user, isSignedIn } = useUser();
   return (
-    <div className="w-full relative h-64 mx-auto flex md:w-4/5 text-white ">
-      <Image src='/herobg.jpg' alt="Home hero backgroun" layout="fill" objectFit="cover" />
-      <div className="absolute inset-0 flex gap-4 md:flex-row items-center justify-center bg-gradient-to-r from-slate-900 px-4 md:px-8">
-        <div className="flex flex-col gap-2 md:gap-4">
-          {isSignedIn ? 
-            <>
-              <h1 className="text-4xl md:text-5xl font-bold">Hello {user.firstName}</h1>
-              <p className="font-semibold md:text-lg">Continue là où tu t'es arrêté</p>
-            </> :
-            <>
-              <h1 className="text-4xl md:text-5xl font-bold">Bienvenu sur Laclass Learn</h1> 
-              <p className="font-semibold md:text-lg">Apprendre par la pratique</p>
-            </>
-          }
-          <p className="text-sm md:text-md">Le meilleur moyen d'apprendre, c'est par la pratique</p>
+    <>
+      <section className="relative bg-[url('/herobg.jpg')] bg-cover bg-center bg-no-repeat">
+        <div className="absolute inset-0 bg-gradient-to-r bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l"></div>
+
+        <div className="relative mx-auto w-full px-4 py-32 sm:px-6 lg:flex lg:h lg:items-center lg:px-8">
+          <div className="max-w-xl text-center sm:text-left flex flex-col gap-6 sm:gap-2">
+            <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
+              Apprendre
+              <span className="block font-extrabold text-blue-500">
+                {" "}
+                Sans Aucune{" "}
+              </span>
+              Limite
+            </h1>
+
+            <p className="mt-4 max-w-lg text-white sm:text-lg/relaxed">
+              Démarre ta carrière aujourd'hui avec des cours orientés 100%
+              pratiques pour maîtriser les technologies web modernes
+            </p>
+
+            <div className="mt-8 flex w-full gap-4">
+              {!isSignedIn ? (
+                <Link
+                  href="/sign-up"
+                  className={cn(
+                    "mx-auto md:mx-0",
+                    buttonVariants({
+                      variant: "secondary",
+                      size: "lg",
+                    })
+                  )}
+                >
+                  Commencer
+                </Link>
+              ) : (
+                <Link
+                  href="/search"
+                  className={cn(
+                    "mx-auto md:mx-0",
+                    buttonVariants({
+                      variant: "secondary",
+                      size: "lg",
+                    })
+                  )}
+                >
+                  Explorer
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
-        <h2 className="py-2 px-8 bg-slate-700 bg-opacity-50 w-fit rounded-sm font-semibold ml-auto">
-          <DisplayHour initialTime={new Date()} />
-        </h2>
-      </div>
-    </div>
+      </section>
+    </>
   );
-}
+};
 
 const useIsClient = () => {
-  const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setIsClient(true);
+  }, []);
 
-  return isClient
-}
+  return isClient;
+};

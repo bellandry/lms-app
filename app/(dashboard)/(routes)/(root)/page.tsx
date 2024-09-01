@@ -1,47 +1,32 @@
-import { db } from "@/lib/db";
-import { HeroSection } from "../../_components/hero";
-import { Categories } from "../search/_components/categories";
-import { CoursesList } from "@/components/courses-list";
 import { getCourses } from "@/actions/get-courses";
-import { auth } from "@clerk/nextjs";
-import { getDashboardCourses } from "@/actions/get-dashboard-courses";
+import { CoursesList } from "@/components/courses-list";
+import { auth } from "@clerk/nextjs/server";
 
 interface HomeProps {
   searchParams: {
-    title: string,
-    categoryId: string
-  }
+    title: string;
+    categoryId: string;
+  };
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
-  let { userId } = auth()
+  let { userId } = auth();
 
-  if(!userId) userId = ""
-
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc" 
-    }
-  })
+  if (!userId) userId = "";
 
   const courses = await getCourses({
     userId,
-    ...searchParams
-  })
+    ...searchParams,
+  });
 
   return (
     <>
-      <HeroSection />
-      <div className="p-6 flex items-center">
-        <Categories
-          items={categories}
-        />
-      </div>
-      <div className="w-full md:w-4/5 p-4  rounded-md mx-auto flex flex-col gap-4">
+      <div className="w-full rounded-md mx-auto flex flex-col gap-4">
+        <h2 className="font-semibold text-xl mt-8 ">Derniers cours</h2>
         <CoursesList items={courses} />
       </div>
     </>
   );
-}
+};
 
-export default Home
+export default Home;

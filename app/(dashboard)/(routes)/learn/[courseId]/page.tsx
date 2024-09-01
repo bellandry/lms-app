@@ -1,9 +1,8 @@
 import { CourseChapterCard } from "@/app/(course)/course/[courseId]/_components/courses-chapter-card";
 import { CourseEnrollButton } from "@/app/(course)/course/[courseId]/chapter/[chapterId]/_components/course-enroll-button";
 import { IconBadge } from "@/components/icon-badge";
-import { Preview } from "@/components/preview";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { BookOpen, File } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -14,70 +13,90 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
+import dynamic from "next/dynamic";
 
+const Editor = dynamic(() => import("@/components/text-editor"), {
+  ssr: false,
+  loading: () => <p>chargement de l'éditeur de texte ...</p>,
+});
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
-  let { userId } = auth()
+  let { userId } = auth();
 
-  if(!userId) userId = ""
+  if (!userId) userId = "";
 
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId
+      id: params.courseId,
     },
     include: {
       chapters: {
         where: {
-          isPublished: true
+          isPublished: true,
         },
         include: {
-          userProgress: userId ? {
-            where: {
-              userId
-            }
-          } : undefined,
+          userProgress: userId
+            ? {
+                where: {
+                  userId,
+                },
+              }
+            : undefined,
         },
         orderBy: {
-          position: "asc"
-        }
+          position: "asc",
+        },
       },
       category: {},
-      attachments: {}
-    }
-  })
+      attachments: {},
+    },
+  });
 
   if (!course) {
-    return redirect("/")
+    return redirect("/");
   }
 
   const purchase = await db.purchase.findUnique({
     where: {
       userId_courseId: {
         userId,
-        courseId: course.id
-      }
-    }
-  })
+        courseId: course.id,
+      },
+    },
+  });
 
   // return redirect(`/course/${course.id}/chapter/${course.chapters[0].id}`)
   return (
     <div className="w-full flex flex-col md:flex-row justify-evenly lg:px-32 max-w-[1200px] mx-auto pb-4">
       <div className="flex flex-col w-full h-fit md:w-3/5 mx-auto p-1 md:m-2 gap-2 border rounded-lg mb-4 pb-4">
         <div className="relative w-full h-52">
-          <Image src={course.imageUrl!} alt="Dynamic Background" layout="fill" objectFit="cover" className="rounded-sm" />
+          <Image
+            src={course.imageUrl!}
+            alt="Dynamic Background"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-sm"
+          />
           <div className="absolute inset-0 flex items-center justify-center bg-slate-900 bg-opacity-60 px-4 rounded-md">
-            <h1 className="text-white text-2xl md:text-3xl font-bold">{course.title}</h1>
+            <h1 className="text-white text-2xl md:text-3xl font-bold">
+              {course.title}
+            </h1>
           </div>
         </div>
-        <Preview value={course.description ?? ""} />
+        {/* <Preview value={course.description ?? ""} /> */}
+
+        <Editor value={course.description ?? ""} readOnly />
         <div className="flex flex-col w-full px-4 gap-2">
           <h2 className="text-xl md:text-2xl font-semibold">Chapitres</h2>
           <div className="w-full px-8">
             <Carousel>
               <CarouselContent>
                 {course.chapters.map((chapter) => (
-                  <CarouselItem key={chapter.id} className="basis-1/2 md:basis-1/3 pl-2 md:pl-4">
+                  <CarouselItem
+                    key={chapter.id}
+                    className="basis-1/2 md:basis-1/3 pl-2 md:pl-4"
+                  >
                     <CourseChapterCard
                       key={chapter.id}
                       id={chapter.id}
@@ -107,13 +126,16 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 <div className="flex items-center gap-x-1 text-gray-300">
                   <IconBadge size="sm" icon={BookOpen} />
                   <span>
-                    {course.chapters.length} {course.chapters.length === 1 ? "Chapitre" : "Chapitres"}
+                    {course.chapters.length}{" "}
+                    {course.chapters.length === 1 ? "Chapitre" : "Chapitres"}
                   </span>
                 </div>
                 <div className="flex items-center gap-x-1 text-gray-300">
                   <IconBadge size="sm" icon={File} />
                   <span>
-                    {course.attachments.length} {course.attachments.length === 1 ? "Fichier" : "Fichiers"} ressources
+                    {course.attachments.length}{" "}
+                    {course.attachments.length === 1 ? "Fichier" : "Fichiers"}{" "}
+                    ressources
                   </span>
                 </div>
               </div>
@@ -144,7 +166,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
 export default CourseIdPage;

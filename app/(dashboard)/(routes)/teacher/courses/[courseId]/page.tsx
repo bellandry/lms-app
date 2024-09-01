@@ -1,8 +1,13 @@
 import { Banner } from "@/components/banner";
 import { IconBadge } from "@/components/icon-badge";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
+import {
+  CircleDollarSign,
+  File,
+  LayoutDashboard,
+  ListChecks,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 import { AttachmentForm } from "./_components/attachment-form";
 import { CategoryForm } from "./_components/category-form";
@@ -13,44 +18,40 @@ import { ImageForm } from "./_components/image-form";
 import { PriceForm } from "./_components/price-form";
 import { TitleForm } from "./_components/title-form";
 
-const CourseIdPage = async ({
-  params
-}: {
-  params: { courseId: string }
-}) => {
-  const { userId } = auth()
+const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
+  const { userId } = auth();
 
   if (!userId) {
-    return redirect("/")
+    return redirect("/");
   }
 
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
-      userId
+      userId,
     },
     include: {
       attachments: {
         orderBy: {
-          createdAt: "desc"
-        }
+          createdAt: "desc",
+        },
       },
       chapters: {
         orderBy: {
-          position: "asc"
-        }
-      }
-    }
-  })
+          position: "asc",
+        },
+      },
+    },
+  });
 
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc"
-    }
-  })
+      name: "asc",
+    },
+  });
 
   if (!course) {
-    return redirect("/")
+    return redirect("/");
   }
 
   const requiredFields = [
@@ -58,15 +59,15 @@ const CourseIdPage = async ({
     course.description,
     course.imageUrl,
     course.categoryId,
-    course.chapters.some(chapter => chapter.isPublished)
-  ]
+    course.chapters.some((chapter) => chapter.isPublished),
+  ];
 
-  const totalFields = requiredFields.length
-  const completedFields = requiredFields.filter(Boolean).length
+  const totalFields = requiredFields.length;
+  const completedFields = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields} / ${totalFields})`
+  const completionText = `(${completedFields} / ${totalFields})`;
 
-  const isComplete = requiredFields.every(Boolean)
+  const isComplete = requiredFields.every(Boolean);
 
   return (
     <>
@@ -80,7 +81,9 @@ const CourseIdPage = async ({
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl font-medium">Informations sur le cours</h1>
-            <span className="text-sm text-slate-700">Champs complétés {completionText}</span>
+            <span className="text-sm text-slate-700">
+              Champs complétés {completionText}
+            </span>
           </div>
           <CourseActions
             disabled={!isComplete}
@@ -94,24 +97,15 @@ const CourseIdPage = async ({
               <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl">Complétez votre cours</h2>
             </div>
-            <TitleForm
-              initialData={course}
-              courseId={course.id}
-            />
-            <DescriptionForm
-              initialData={course}
-              courseId={course.id}
-            />
-            <ImageForm
-              initialData={course}
-              courseId={course.id}
-            />
+            <TitleForm initialData={course} courseId={course.id} />
+            <DescriptionForm initialData={course} courseId={course.id} />
+            <ImageForm initialData={course} courseId={course.id} />
             <CategoryForm
               initialData={course}
               courseId={course.id}
-              options={categories.map(category => ({
+              options={categories.map((category) => ({
                 label: category.name,
-                value: category.id
+                value: category.id,
               }))}
             />
           </div>
@@ -123,10 +117,7 @@ const CourseIdPage = async ({
               </div>
             </div>
             <div>
-              <ChaptersForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <ChaptersForm initialData={course} courseId={course.id} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
@@ -134,10 +125,7 @@ const CourseIdPage = async ({
                 <h2 className="text-xl">Vendez votre cours</h2>
               </div>
               <div>
-                <PriceForm
-                  initialData={course}
-                  courseId={course.id}
-                />
+                <PriceForm initialData={course} courseId={course.id} />
               </div>
             </div>
             <div>
@@ -146,20 +134,15 @@ const CourseIdPage = async ({
                 <h2 className="text-xl">Ressources & Documents</h2>
               </div>
               <div>
-                <AttachmentForm
-                  initialData={course}
-                  courseId={course.id}
-                />
+                <AttachmentForm initialData={course} courseId={course.id} />
               </div>
             </div>
           </div>
-          <div >
-
-          </div>
+          <div></div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default CourseIdPage;

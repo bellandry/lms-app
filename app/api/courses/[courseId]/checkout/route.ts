@@ -1,30 +1,29 @@
-import { db } from "@/lib/db"
-import { stripe } from "@/lib/stripe"
-import { currentUser } from "@clerk/nextjs"
-import { Description } from "@radix-ui/react-dialog"
-import { NextResponse } from "next/server"
-import Stripe from "stripe"
+import { db } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
+import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
 
 export async function POST(
   req: Request,
-  { params }:{ params: {courseId: string}}
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const user = await currentUser()
+    const user = await currentUser();
 
-    if(!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse('Unauthorized', { status: 401 })
+    if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
       where: {
         id: params.courseId,
-        isPublished: true
-      }
-    })
+        isPublished: true,
+      },
+    });
 
-    if(!course) {
-      return new NextResponse('Course not found', { status: 404 })
+    if (!course) {
+      return new NextResponse("Course not found", { status: 404 });
     }
 
     const purchase = await db.purchase.findUnique({
@@ -32,65 +31,65 @@ export async function POST(
         userId_courseId: {
           userId: user.id,
           courseId: course.id,
-        }
-      }
-    })
+        },
+      },
+    });
 
-    if(purchase) {
-      return new NextResponse('Already purchased', { status: 400 })
+    if (purchase) {
+      return new NextResponse("Already purchased", { status: 400 });
     }
 
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
         quantity: 1,
         price_data: {
-          currency: 'EUR',
+          currency: "EUR",
           product_data: {
             name: course.title,
-            description: course.description!
+            description: course.description!,
           },
-          unit_amount: Math.round(course.price! * 0.00152449 * 100)
-        }
-      }
-    ]
+          unit_amount: Math.round(course.price! * 0.00152449 * 100),
+        },
+      },
+    ];
 
     let stripeCustomer = await db.stripeCustomer.findUnique({
       where: {
-        userId: user.id
+        userId: user.id,
       },
       select: {
-        stripeCustomerId: true
-      }
-    })
+        stripeCustomerId: true,
+      },
+    });
 
-    if(!stripeCustomer){
+    if (!stripeCustomer) {
       const customer = await stripe.customers.create({
-        email: user.emailAddresses[0].emailAddress
-      })
+        email: user.emailAddresses[0].emailAddress,
+      });
 
       stripeCustomer = await db.stripeCustomer.create({
         data: {
           userId: user.id,
-          stripeCustomerId: customer.id
-        }
-      })
+          stripeCustomerId: customer.id,
+        },
+      });
     }
 
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomer.stripeCustomerId,
       line_items,
-      mode: 'payment',
+      mode: "payment",
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/course/${course.id}?success=1`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/course/${course.id}?canceled=1`,
       metadata: {
         courseId: course.id,
-        userId: user.id
-      }
-    })
+        userId: user.id,
+      },
+    });
 
-    return NextResponse.json({ url: session.url })
-  } catch(err: any) {
-    console.log('[COURSE_ID_CHECKOUT]', err)
-    return new NextResponse('internal server error', { status: 500 })
+    return NextResponse.json({ url: session.url });
+  } catch (err: any) {
+    console.log("[COURSE_ID_CHECKOUT]", err);
+    return new NextResponse("internal server error", { status: 500 });
   }
 }

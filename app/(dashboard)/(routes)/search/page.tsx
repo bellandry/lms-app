@@ -2,48 +2,45 @@ import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
 import { SearchInput } from "@/components/search-input";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import { Categories } from "./_components/categories";
 
 interface SearchPageProps {
   searchParams: {
-    title: string,
-    categoryId: string
-  }
+    title: string;
+    categoryId: string;
+  };
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  let { userId } = auth()
+  let { userId } = auth();
 
-  if (!userId) userId = ""
+  if (!userId) userId = "";
 
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc"
-    }
-  })
+      name: "asc",
+    },
+  });
 
   const courses = await getCourses({
     userId,
-    ...searchParams
-  })
+    ...searchParams,
+  });
 
   return (
     <>
-      <div className="block px-6 pt-6 md:hidden md:mb-0">
+      <div className="mt-6 md:py-6 flex items-center justify-center">
         <SearchInput />
       </div>
       <div className="p-6 flex items-center">
-        <Categories
-          items={categories}
-        />
+        <Categories items={categories} />
       </div>
-      <div className="w-full md:w-4/5 p-4  rounded-md mx-auto flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-4">
         <CoursesList items={courses} />
       </div>
     </>
   );
-}
+};
 
 export default SearchPage;
