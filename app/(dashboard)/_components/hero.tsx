@@ -31,7 +31,7 @@ export const HeroSection = () => {
             </h1>
 
             <p className="mt-4 max-w-lg text-white sm:text-lg/relaxed">
-              Démarre ta carrière aujourd'hui avec des cours orientés 100%
+              Démarre ta carrière aujourd&apos;hui avec des cours orientés 100%
               pratiques pour maîtriser les technologies web modernes
             </p>
 
