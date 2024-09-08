@@ -16,6 +16,7 @@ import { CourseActions } from "./_components/course-actions";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { PriceForm } from "./_components/price-form";
+import { MetaDescriptionForm } from "./_components/seo-description-form";
 import { TitleForm } from "./_components/title-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -98,6 +99,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <h2 className="text-xl">Complétez votre cours</h2>
             </div>
             <TitleForm initialData={course} courseId={course.id} />
+            <MetaDescriptionForm initialData={course} courseId={course.id} />
             <DescriptionForm initialData={course} courseId={course.id} />
             <ImageForm initialData={course} courseId={course.id} />
             <CategoryForm

@@ -10,17 +10,18 @@ datasource db {
 }
 
 model Course {
-  id          String       @id @default(uuid())
+  id          String          @id @default(uuid())
   userId      String
-  title       String       @db.Text
-  description String?      @db.Text
-  imageUrl    String?      @db.Text
+  title       String          @db.Text
+  description String?         @db.Text
+  metaDescription String?    @db.Text
+  imageUrl    String?         @db.Text
   price       Float?
-  isPublished Boolean      @default(false)
+  isPublished Boolean         @default(false)
   categoryId  String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  category    Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   attachments Attachment[]
   chapters    Chapter[]
   purchases   Purchase[]

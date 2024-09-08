@@ -30,7 +30,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
 
   return (
     <>
-      <div className="mt-6 md:py-6 flex items-center justify-center">
+      <div className="mt-[90px] md:py-6 flex items-center justify-center">
         <SearchInput />
       </div>
       <div className="p-6 flex items-center">

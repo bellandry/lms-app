@@ -21,6 +21,14 @@ h6.ce-header {
   @apply text-base font-semibold;
 }
 
+.yoo-embed-relative {
+  @apply max-w-full;
+}
+
+iframe {
+  @apply max-w-full;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

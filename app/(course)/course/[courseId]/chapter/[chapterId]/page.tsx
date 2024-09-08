@@ -1,7 +1,7 @@
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
+import MyEditor from "@/components/editor";
 import { IconBadge } from "@/components/icon-badge";
-import Editor from "@/components/text-editor";
 import { auth } from "@clerk/nextjs/server";
 import { File } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -35,11 +35,11 @@ const ChapterIdPage = async ({
   });
 
   if (!chapter || !course) {
-    return redirect("/");
+    return redirect("/lol");
   }
 
   const isLocked = !chapter.isFree && !purchase;
-  const oompleteOnEnd = !!purchase && !userProgress?.isCompleted;
+  const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
   return (
     <div>
@@ -58,7 +58,7 @@ const ChapterIdPage = async ({
       <div className="flex flex-col md:flex-row max-w-[1300px] mx-auto pb-20 p-2 md:p-4 gap-2">
         <div className="flex flex-col w-full md:w-4/6 mx-auto">
           <h1 className="text-2xl md:text-4xl font-bold">{chapter.title}</h1>
-          <Editor value={chapter.description ?? ""} readOnly />
+          <p className="my-2">{chapter.description}</p>
           <ChapterVideoPlayer isLocked={isLocked} chapter={chapter} />
           {!purchase && (
             <CourseEnrollButton
@@ -67,7 +67,7 @@ const ChapterIdPage = async ({
               variant=""
             />
           )}
-          {!isLocked && <Editor value={chapter.content ?? ""} readOnly />}
+          {!isLocked && <MyEditor value={chapter.content ?? ""} readOnly />}
 
           {purchase && (
             <div className="flex justify-end p-4">
@@ -82,9 +82,9 @@ const ChapterIdPage = async ({
         </div>
         <div className="w-full md:w-2/6">
           <div className="flex flex-col w-full gap-2 bg-gradient-to-tr my-6 from-gray-950 to-gray-700 text-white rounded-lg md:sticky md:top-20">
-            <div className="flex flex-col w-full py-2 pb-4 px-6 gap-4 ">
+            <div className="flex flex-col w-full py-4 pb-4 px-6 gap-2 ">
               <h2 className="text-xl font-semibold">Documents utiles </h2>
-              <div>
+              <div className="flex flex-col gap-1 mb-2">
                 <div className="my-2 flex flex-col gap-2 text-sm">
                   <div className="flex items-center gap-x-1 text-gray-300">
                     <IconBadge size="sm" icon={File} />
@@ -142,9 +142,25 @@ const ChapterIdPage = async ({
                   )}
                 </div>
               </div>
+              {!purchase && (
+                <CourseEnrollButton
+                  variant="secondary"
+                  courseId={params.courseId}
+                  price={course.price ?? 0}
+                  className="hidden md:block"
+                />
+              )}
             </div>
           </div>
         </div>
+        {!purchase && (
+          <CourseEnrollButton
+            variant=""
+            courseId={params.courseId}
+            price={course.price ?? 0}
+            className="sticky bottom-4 md:hidden w-full items-center mx-auto shadow-md shadow-slate-500"
+          />
+        )}
       </div>
     </div>
   );

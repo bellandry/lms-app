@@ -1,82 +1,86 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Chapter, Course } from "@prisma/client"
-import axios from "axios"
-import { Loader2, PlusCircle } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
-import * as z from "zod"
-import { ChaptersList } from "./chapters-list"
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chapter, Course } from "@prisma/client";
+import axios from "axios";
+import { Loader2, PlusCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
+import { ChaptersList } from "./chapters-list";
 
 interface ChaptersFormProps {
-  initialData: Course & { chapters: Chapter[] }
-  courseId: string
+  initialData: Course & { chapters: Chapter[] };
+  courseId: string;
 }
 
 const formSchema = z.object({
   title: z.string().min(1, {
-    message: "Le chapite doit avoir un titre"
-  })
-})
+    message: "Le chapite doit avoir un titre",
+  }),
+});
 
-export const ChaptersForm = ({
-  initialData,
-  courseId
-}: ChaptersFormProps) => {
-  const [isCreating, setIsCreating] = useState(false)
-  const [isUpdating, setIsUpdating] = useState(false)
+export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const toggleCreating = () => {
-    setIsCreating((current) => !current)
-  }
+    setIsCreating((current) => !current);
+  };
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: ""
-    }
-  })
+      title: "",
+    },
+  });
 
-  const { isSubmitting, isValid } = form.formState
+  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/chapters`, values)
-      toast.success("Chapitre Crée !")
-      toggleCreating()
-      router.refresh()
+      await axios.post(`/api/courses/${courseId}/chapters`, values);
+      toast.success("Chapitre Crée !");
+      toggleCreating();
+      form.reset();
+      router.refresh();
     } catch {
-      toast.error("Une erreur inatendue est survenue")
+      toast.error("Une erreur inatendue est survenue");
     }
-  }
+  };
 
-  const onReorder = async (updatedData: { id: string, position: number }[]) => {
+  const onReorder = async (updatedData: { id: string; position: number }[]) => {
     try {
-      setIsUpdating(true)
+      setIsUpdating(true);
 
       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
-        list: updatedData
-      })
-      toast.success("Chapitres réorganisés")
-      router.refresh()
+        list: updatedData,
+      });
+      toast.success("Chapitres réorganisés");
+      router.refresh();
     } catch {
-      toast.error("Une erreur innatendue est survenue")
+      toast.error("Une erreur innatendue est survenue");
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
-  }
+  };
 
   const onEdit = (id: string) => {
-    router.push(`/teacher/courses/${courseId}/chapters/${id}`)
-  }
+    router.push(`/teacher/courses/${courseId}/chapters/${id}`);
+  };
 
   return (
     <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
@@ -88,12 +92,14 @@ export const ChaptersForm = ({
       <div className="font-medium flex items-center justify-between">
         Chapitres du cours
         <Button onClick={toggleCreating} variant="ghost">
-          {isCreating ? "Cancel" :
+          {isCreating ? (
+            "Cancel"
+          ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
               Ajouter un Chapitre
             </>
-          }
+          )}
         </Button>
       </div>
       {isCreating && (
@@ -132,10 +138,12 @@ export const ChaptersForm = ({
       )}
       {!isCreating && (
         <>
-          <div className={cn(
-            "text-sm mt-2",
-            !initialData.chapters.length && "text-slate-500 italic"
-          )}>
+          <div
+            className={cn(
+              "text-sm mt-2",
+              !initialData.chapters.length && "text-slate-500 italic"
+            )}
+          >
             {!initialData.chapters.length && "Aucun Chapitre"}
             <ChaptersList
               onEdit={onEdit}
@@ -149,5 +157,5 @@ export const ChaptersForm = ({
         </>
       )}
     </div>
-  )
-}
+  );
+};

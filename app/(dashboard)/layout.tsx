@@ -28,7 +28,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <main
         className={cn(
           "h-full md:container px-4 mb-14 flex-grow",
-          isTeacherMode && "md:pl-64"
+          isTeacherMode && "md:pl-64",
+          pathName !== "/" && "pt-[70px]"
         )}
       >
         {children}

@@ -1,6 +1,5 @@
 "use client";
 
-import MyEditor from "@/components/editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,6 +8,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Course } from "@prisma/client";
@@ -20,21 +20,21 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
 
-interface DescriptionFormProps {
+interface MetaDescriptionFormProps {
   initialData: Course;
   courseId: string;
 }
 
 const formSchema = z.object({
-  description: z.string().min(50, {
+  metaDescription: z.string().min(50, {
     message: "La description doit contenir au moins 50 caractères",
   }),
 });
 
-export const DescriptionForm = ({
+export const MetaDescriptionForm = ({
   initialData,
   courseId,
-}: DescriptionFormProps) => {
+}: MetaDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {
@@ -46,7 +46,7 @@ export const DescriptionForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "",
+      metaDescription: initialData?.metaDescription || "",
     },
   });
 
@@ -57,7 +57,7 @@ export const DescriptionForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Description mise à jour !");
+      toast.success("Meta Description mise à jour !");
       toggleEdit();
       router.refresh();
     } catch {
@@ -68,14 +68,14 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Description du cours
+        Meta description du cours
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             "Cancel"
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier la description
+              Modifier la meta description
             </>
           )}
         </Button>
@@ -84,14 +84,12 @@ export const DescriptionForm = ({
         <div
           className={cn(
             "text-sm mt-2 max-h-96 overflow-y-auto",
-            !initialData.description && "text-slate-500 italic"
+            !initialData.metaDescription && "text-slate-500 italic"
           )}
         >
-          {initialData.description ? (
-            <MyEditor value={initialData.description} readOnly />
-          ) : (
-            "Aucune description pour le moment"
-          )}
+          {initialData.metaDescription
+            ? initialData.metaDescription
+            : "Aucune description pour le moment"}
         </div>
       ) : (
         <Form {...form}>
@@ -101,11 +99,11 @@ export const DescriptionForm = ({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="metaDescription"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <MyEditor {...field} />
+                    <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

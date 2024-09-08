@@ -71,6 +71,7 @@ const TextEditor = (
   OnChange?: (value: string) => void
 ) => {
   const rendered = useRef<false | true>(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!rendered.current) {
@@ -83,7 +84,7 @@ const TextEditor = (
 
         onReady() {
           editor.render({
-            blocks: JSON.parse(content) || [],
+            blocks: JSON.parse(content),
           });
         },
 
@@ -92,13 +93,13 @@ const TextEditor = (
             .save()
             .then((outputData) => {
               OnChange && OnChange(JSON.stringify(outputData.blocks));
+              console.log(outputData.blocks);
             })
             .catch((error) => {
               console.log("Saving failed: ", error);
             });
         },
 
-        inlineToolbar: true,
         tools: {
           header: {
             class: Header,
@@ -117,10 +118,13 @@ const TextEditor = (
           list: List,
           checkList: CheckList,
           delimiter: Delimiter,
-          paragraph: Paragraph,
+          paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
+          },
           link: Link,
           title: Title,
-          ...(readonly ? {} : { table: Table }),
+          table: Table,
           alert: {
             class: Alert,
             inlineToolbar: true,
@@ -137,7 +141,6 @@ const TextEditor = (
                 "dark",
               ],
               defaultType: "primary",
-              messagePlaceholder: "Enter something",
             },
           },
           code: {
@@ -146,7 +149,7 @@ const TextEditor = (
           },
           AnyButton: {
             class: AnyButton,
-            inlineToolbar: false,
+            inlineToolbar: true,
             config: {
               css: {
                 btnColor: "bg-slate-800",
@@ -156,6 +159,7 @@ const TextEditor = (
         },
         readOnly: readonly,
       });
+      (ref as React.MutableRefObject<any>).current = editor;
     } else {
       return;
     }

@@ -1,6 +1,5 @@
 "use client";
 
-import Editor from "@/components/text-editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,13 +8,14 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chapter } from "@prisma/client";
 import axios from "axios";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -38,6 +38,7 @@ export const ChapterDescriptionForm = ({
   chapterId,
 }: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const toggleEdit = () => {
     setIsEditing((current) => !current);
@@ -90,11 +91,9 @@ export const ChapterDescriptionForm = ({
             !initialData.description && "text-slate-500 italic"
           )}
         >
-          {initialData.description ? (
-            <Editor value={initialData.description} readOnly />
-          ) : (
-            "Aucune description pour le moment"
-          )}
+          {initialData.description
+            ? initialData.description
+            : "Aucune description pour le moment"}
         </div>
       ) : (
         <Form {...form}>
@@ -108,7 +107,7 @@ export const ChapterDescriptionForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Editor {...field} />
+                    <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -36,7 +36,8 @@ export async function PATCH(
       !chapter ||
       !chapter.title ||
       !chapter.description ||
-      !chapter.videoUrl
+      // !chapter.videoUrl ||
+      !chapter.content
     ) {
       return new NextResponse("Missing Required fields", { status: 404 });
     }

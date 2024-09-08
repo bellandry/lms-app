@@ -7,19 +7,8 @@ import { BookOpen, File } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import dynamic from "next/dynamic";
-
-const Editor = dynamic(() => import("@/components/text-editor"), {
-  ssr: false,
-  loading: () => <p>chargement de l'éditeur de texte ...</p>,
-});
+import MyEditor from "@/components/editor";
+import { Categories } from "../../search/_components/categories";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   let { userId } = auth();
@@ -66,9 +55,8 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     },
   });
 
-  // return redirect(`/course/${course.id}/chapter/${course.chapters[0].id}`)
   return (
-    <div className="w-full flex flex-col md:flex-row justify-evenly lg:px-32 max-w-[1200px] mx-auto pb-4">
+    <div className="w-full flex flex-col md:flex-row justify-evenly lg:px-32 max-w-[1400px] mx-auto pb-4">
       <div className="flex flex-col w-full h-fit md:w-3/5 mx-auto p-1 md:m-2 gap-2 border rounded-lg mb-4 pb-4">
         <div className="relative w-full h-52">
           <Image
@@ -78,46 +66,50 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             objectFit="cover"
             className="rounded-sm"
           />
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-900 bg-opacity-60 px-4 rounded-md">
+          <div className="absolute flex-col inset-0 flex items-center justify-center bg-slate-900 bg-opacity-60 px-4 rounded-md">
             <h1 className="text-white text-2xl md:text-3xl font-bold">
               {course.title}
             </h1>
           </div>
         </div>
-        {/* <Preview value={course.description ?? ""} /> */}
-
-        <Editor value={course.description ?? ""} readOnly />
-        <div className="flex flex-col w-full px-4 gap-2">
-          <h2 className="text-xl md:text-2xl font-semibold">Chapitres</h2>
-          <div className="w-full px-8">
-            <Carousel>
-              <CarouselContent>
-                {course.chapters.map((chapter) => (
-                  <CarouselItem
-                    key={chapter.id}
-                    className="basis-1/2 md:basis-1/3 pl-2 md:pl-4"
-                  >
-                    <CourseChapterCard
-                      key={chapter.id}
-                      id={chapter.id}
-                      label={chapter.title}
-                      isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
-                      courseId={course.id}
-                      isLocked={!chapter.isFree && !purchase}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
+        <div className="mx-2">
+          {course.category && <Categories items={[course.category]} />}
+          {/* <Preview value={course.description ?? ""} /> */}
+          <h2 className="text-lg font-semibold text-slate-900">Description</h2>
+          <MyEditor value={course.description ?? ""} readOnly />
+          <div className="flex flex-col w-full md:px-2 gap-2">
+            <h2 className="text-xl md:text-2xl font-semibold">Chapitres</h2>
+            <div className="w-full flex flex-col gap-2 px-2 md:px-4">
+              {/* <Carousel>
+              <CarouselContent> */}
+              {course.chapters.map((chapter) => (
+                // <CarouselItem
+                //   key={chapter.id}
+                //   className="basis-1/2 md:basis-1/3 pl-2 md:pl-4"
+                // >
+                <CourseChapterCard
+                  key={chapter.id}
+                  id={chapter.id}
+                  label={chapter.title}
+                  description={chapter.description ?? undefined}
+                  isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+                  courseId={course.id}
+                  isLocked={!chapter.isFree && !purchase}
+                />
+                // </CarouselItem>
+              ))}
+              {/* </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
-            </Carousel>
+            </Carousel> */}
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-full md:h-fit mt-4 md:w-2/5 mx-auto md:m-2 border rounded-lg md:sticky md:top-20">
-        <div className="flex flex-col w-full gap-2 bg-gradient-to-tr mb-6 md:mb-1 from-gray-950 to-gray-700 text-white rounded-lg">
+      <div className="flex flex-col w-full md:h-fit mt-4 md:w-2/5 mx-auto md:m-2 border rounded-lg md:sticky md:top-20 mb-6 md:mb-1">
+        <div className="flex flex-col w-full gap-2 py-1 bg-gradient-to-tr from-gray-950 to-gray-700 text-white rounded-lg">
           <div className="flex flex-col w-full py-2 pb-4 px-6 gap-4 ">
-            <h2 className="text-2xl font-semibold">Prêt à commencer ?</h2>
+            <h2 className="text-xl font-semibold">Prêt à commencer ?</h2>
             <div>
               <p className="text-xs bg-slate-400 p-1 rounded-sm w-fit">
                 {course.category?.name}
@@ -162,7 +154,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           variant=""
           courseId={params.courseId}
           price={course.price ?? 0}
-          className="sticky bottom-4 md:hidden w-5/6 items-center mx-auto"
+          className="sticky bottom-4 md:hidden w-full items-center mx-auto shadow-md shadow-slate-500"
         />
       )}
     </div>

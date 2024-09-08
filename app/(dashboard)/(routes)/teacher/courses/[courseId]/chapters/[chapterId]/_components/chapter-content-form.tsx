@@ -1,6 +1,6 @@
 "use client";
 
-import Editor from "@/components/text-editor";
+import MyEditor from "@/components/editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +15,7 @@ import { Chapter } from "@prisma/client";
 import axios from "axios";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -38,6 +38,7 @@ export const ChapterContentForm = ({
   chapterId,
 }: ChapterContentFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const toggleEdit = () => {
     setIsEditing((current) => !current);
@@ -91,7 +92,7 @@ export const ChapterContentForm = ({
           )}
         >
           {initialData.content ? (
-            <Editor value={initialData.content} readOnly />
+            <MyEditor value={initialData.content} readOnly />
           ) : (
             "Aucun contenu pour le moment"
           )}
@@ -108,7 +109,7 @@ export const ChapterContentForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Editor {...field} />
+                    <MyEditor {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
