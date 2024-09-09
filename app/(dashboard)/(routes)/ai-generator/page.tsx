@@ -4,10 +4,10 @@ import Link from "next/link";
 const AiGeneratorHome = () => {
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl px-4 py-32 flex my-auto h-full items-center mt-[70px]">
-        <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-screen-xl px-4 py-16 flex h-full items-center">
+        <div className="mx-auto my-auto max-w-3xl text-center h-fit">
           <h1 className="bg-gradient-to-r from-slate-800 via-blue-500 to-slate-800 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl">
-            Créez des cours personnalisés.
+            Créez des cours personnalisés
             <span className="sm:block"> assisté par l&apos;IA </span>
           </h1>
 

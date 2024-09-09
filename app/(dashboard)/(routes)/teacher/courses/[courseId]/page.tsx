@@ -15,9 +15,11 @@ import { ChaptersForm } from "./_components/chapters-form";
 import { CourseActions } from "./_components/course-actions";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
+import { LevelForm } from "./_components/level-form";
 import { PriceForm } from "./_components/price-form";
 import { MetaDescriptionForm } from "./_components/seo-description-form";
 import { TitleForm } from "./_components/title-form";
+import { TypeForm } from "./_components/type-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -110,6 +112,8 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 value: category.id,
               }))}
             />
+            <LevelForm initialData={course} courseId={course.id} />
+            <TypeForm initialData={course} courseId={course.id} />
           </div>
           <div className="space-y-6">
             <div>

@@ -3,8 +3,10 @@ CREATE TABLE `Course` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `title` TEXT NOT NULL,
+    `level` VARCHAR(191) NULL,
+    `type` VARCHAR(191) NULL,
     `description` TEXT NULL,
-    `meta_description` TEXT NULL,
+    `metaDescription` TEXT NULL,
     `imageUrl` TEXT NULL,
     `price` DOUBLE NULL,
     `isPublished` BOOLEAN NOT NULL DEFAULT false,
@@ -93,6 +95,7 @@ CREATE TABLE `Purchase` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    INDEX `Purchase_courseId_idx`(`courseId`),
     UNIQUE INDEX `Purchase_userId_courseId_key`(`userId`, `courseId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -28,16 +28,45 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     ...searchParams,
   });
 
+  // Filtrer les cours par type
+  const courseItems = courses.filter((course) => course.type === "course");
+  const cheatsheetItems = courses.filter(
+    (course) => course.type === "cheatsheet"
+  );
+  const aiCourseItems = courses.filter((course) => course.type === "ai-course");
+
   return (
     <>
-      <div className="mt-[90px] md:py-6 flex items-center justify-center">
+      <div className="mt-[25px] md:py-6 flex items-center justify-center">
         <SearchInput />
       </div>
       <div className="p-6 flex items-center">
         <Categories items={categories} />
       </div>
       <div className="w-full flex flex-col gap-4">
-        <CoursesList items={courses} />
+        {courseItems.length > 0 && (
+          <>
+            <h2 className="font-semibold text-xl mt-4">Cours</h2>
+            <CoursesList items={courseItems} />
+          </>
+        )}
+        {aiCourseItems.length > 0 && (
+          <>
+            <h2 className="font-semibold text-xl mt-4">Cours IA</h2>
+            <CoursesList items={aiCourseItems} />
+          </>
+        )}
+        {cheatsheetItems.length > 0 && (
+          <>
+            <h2 className="font-semibold text-xl mt-4">Feuilles de route</h2>
+            <CoursesList items={cheatsheetItems} />
+          </>
+        )}
+        {courses.length === 0 && (
+          <div className="text-center text-sm text-muted-foreground mt-10">
+            Aucun contenu correspondant à votre recherche
+          </div>
+        )}
       </div>
     </>
   );

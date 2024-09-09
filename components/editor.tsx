@@ -139,7 +139,7 @@ function MyEditor({ value, onChange, readOnly = false }: EditorProps) {
   return (
     <div className="" ref={selectionRef}>
       <YooptaEditor
-        className="-mb-28"
+        className="-mb-24"
         editor={editor}
         plugins={plugins}
         tools={TOOLS}

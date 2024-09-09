@@ -1,7 +1,15 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -13,36 +21,39 @@ import * as z from "zod";
 
 const formSchema = z.object({
   title: z.string().min(4, {
-    message: "Le titre est obligatoire"
-  })
-})
+    message: "Le titre est obligatoire",
+  }),
+});
 
 const CreateCoursePage = () => {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: ""
-    }
-  })
+      title: "",
+    },
+  });
 
-  const { isSubmitting, isValid } = form.formState
+  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/courses", values)
-      router.push(`/teacher/courses/${response.data.id}`)
-      toast.success("Cours crée avec succès !")
+      const response = await axios.post("/api/courses", values);
+      router.push(`/teacher/courses/${response.data.id}`);
+      toast.success("Cours crée avec succès !");
     } catch {
-      toast.error("Une erreur inattendue s'est produite")
+      toast.error("Une erreur inattendue s'est produite");
     }
-  }
+  };
 
   return (
-    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
-      <div>
+    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center my-auto p-6">
+      <div className="my-auto">
         <h1>Titre de votre cours</h1>
-        <p className="text-sm text-slate-600">Comment voulez vous appeler votre cours ? Vous pourrez changer ce nom plus tard</p>
+        <p className="text-sm text-slate-600">
+          Comment voulez vous appeler votre cours ? Vous pourrez changer ce nom
+          plus tard
+        </p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -53,9 +64,7 @@ const CreateCoursePage = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Titre du cours
-                  </FormLabel>
+                  <FormLabel>Titre du cours</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -71,20 +80,12 @@ const CreateCoursePage = () => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Link
-                href="/"
-              >
-                <Button
-                  type="button"
-                  variant="ghost"
-                >
+              <Link href="/">
+                <Button type="button" variant="ghost">
                   Annuler
                 </Button>
               </Link>
-              <Button
-                type="submit"
-                disabled={!isValid || isSubmitting}
-              >
+              <Button type="submit" disabled={!isValid || isSubmitting}>
                 Continuer
               </Button>
             </div>
@@ -93,6 +94,6 @@ const CreateCoursePage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default CreateCoursePage;

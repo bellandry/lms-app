@@ -21,7 +21,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       )}
       {pathName === "/" && (
-        <div className="lg:container pt-[70px]">
+        <div className="pt-[70px]">
           <HeroSection />
         </div>
       )}

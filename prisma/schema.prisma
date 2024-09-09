@@ -13,8 +13,10 @@ model Course {
   id          String          @id @default(uuid())
   userId      String
   title       String          @db.Text
+  level       String?         
+  type        String?         
   description String?         @db.Text
-  metaDescription String?    @db.Text
+  metaDescription String?     @db.Text
   imageUrl    String?         @db.Text
   price       Float?
   isPublished Boolean         @default(false)
@@ -103,6 +105,7 @@ model Purchase {
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([courseId])
 }
 
 model StripeCustomer {
