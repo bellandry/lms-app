@@ -1,22 +1,11 @@
-"use client"
+"use client";
 
-import { Category } from "@prisma/client"
-import { IconType } from "react-icons"
-import { FcComboChart, FcCommandLine, FcEditImage, FcLock, FcMultipleCameras, FcMultipleSmartphones, FcMusic } from "react-icons/fc"
-import { CategoryItem } from "./category-item"
+import { iconMap } from "@/constants";
+import { Category } from "@prisma/client";
+import { CategoryItem } from "./category-item";
 
 interface CategoriesProps {
-  items: Category[]
-}
-
-const iconMap: Record<Category["name"], IconType> = {
-  "Music": FcMusic,
-  "Photographie": FcMultipleCameras,
-  "programmation": FcCommandLine,
-  "Comptabilité": FcComboChart,
-  "Infographie": FcEditImage,
-  "Sécurité informatique": FcLock,
-  "Intelligence artificielle": FcMultipleSmartphones
+  items: Category[];
 }
 
 export const Categories = ({ items }: CategoriesProps) => {
@@ -32,4 +21,4 @@ export const Categories = ({ items }: CategoriesProps) => {
       ))}
     </div>
   );
-}
+};
