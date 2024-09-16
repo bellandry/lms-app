@@ -44,6 +44,7 @@ export const NavbarRoutes = () => {
           <Link
             href="/sign-in"
             className={cn(
+              "dark:bg-gray-50 dark:text-gray-900",
               buttonVariants({
                 variant: "default",
               })
