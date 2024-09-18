@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUserCourseInputStore } from "@/hooks/ai-user-input-hook";
+import { Crown } from "lucide-react";
 
 const SelectOption = () => {
   const { userCourseInput, setUserCourseInput } = useUserCourseInputStore();
@@ -62,8 +63,13 @@ const SelectOption = () => {
             <SelectContent>
               <SelectItem value="1 hour">1 heure</SelectItem>
               <SelectItem value="4 hours">4 heures</SelectItem>
-              <SelectItem value="more than 4 hours ">
-                Plus de 4 heures
+              <SelectItem disabled={true} value="more than 4 hours ">
+                <span className="flex gap-14 justify-between items-center">
+                  <span className="w-fit">Plus de 4 heures</span>
+                  <span className="font-bold flex items-center gap-2 ml-auto py-1 px-3 bg-blue-700/20 rounded-full">
+                    <Crown className="size-3" /> PRO
+                  </span>
+                </span>
               </SelectItem>
             </SelectContent>
           </Select>
@@ -78,8 +84,8 @@ const SelectOption = () => {
               <SelectValue placeholder="Inclure des vidéos ?" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Oui</SelectItem>
-              <SelectItem value="0">Non</SelectItem>
+              <SelectItem value="true">Oui</SelectItem>
+              <SelectItem value="false">Non</SelectItem>
             </SelectContent>
           </Select>
         </div>
