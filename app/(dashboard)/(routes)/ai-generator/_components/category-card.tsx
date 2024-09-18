@@ -32,7 +32,7 @@ const CategoryCard = ({ categoryId, categoryName }: CategoryCardProps) => {
       onClick={handleCategoryChange}
     >
       <Icon className="size-10" />
-      {CategoryCard.name}
+      {categoryName}
     </div>
   );
 };
