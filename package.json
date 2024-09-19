@@ -22,6 +22,7 @@
     "@editorjs/link": "^2.6.2",
     "@editorjs/list": "^1.10.0",
     "@editorjs/paragraph": "^2.11.6",
+    "@google/generative-ai": "^0.19.0",
     "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@mux/mux-node": "^8.2.3",

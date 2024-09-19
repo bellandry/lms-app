@@ -14,7 +14,8 @@ const SelectOption = () => {
   const { userCourseInput, setUserCourseInput } = useUserCourseInputStore();
 
   const handleOptions =
-    (field: "level" | "duration" | "video" | "chapters") => (value: string) => {
+    (field: "level" | "duration" | "video" | "chapters" | "language") =>
+    (value: string) => {
       setUserCourseInput({
         ...userCourseInput,
         options: { ...userCourseInput.options, [field]: value },
@@ -97,6 +98,21 @@ const SelectOption = () => {
             value={userCourseInput.options.chapters}
             onChange={handleChapters("chapters")}
           />
+        </div>
+        <div className="flex flex-col gap-4">
+          <Label htmlFor="">🎥 Langue</Label>
+          <Select
+            onValueChange={(value) => handleOptions("language")(value)}
+            defaultValue={String(userCourseInput.options.language)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Choisissez votre langue" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="french">Français</SelectItem>
+              <SelectItem value="english">Anglais</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

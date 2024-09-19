@@ -15,7 +15,7 @@ const CategoryCard = ({ categoryId, categoryName }: CategoryCardProps) => {
   const handleCategoryChange = () => {
     setUserCourseInput({
       ...userCourseInput,
-      category: categoryId,
+      category: { id: categoryId, name: categoryName },
     });
     return;
   };
@@ -26,7 +26,7 @@ const CategoryCard = ({ categoryId, categoryName }: CategoryCardProps) => {
     <div
       className={cn(
         "aspect-video text-sm sm:text-md flex gap-3 p-2 text-center flex-col bg-slate-200 border rounded-xl border-slate-300 items-center justify-center hover:border-slate-500 hover:bg-slate-300 transition-all cursor-pointer",
-        userCourseInput.category === categoryId &&
+        userCourseInput.category.id === categoryId &&
           "border-slate-500 bg-slate-300"
       )}
       onClick={handleCategoryChange}
