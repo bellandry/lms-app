@@ -10,23 +10,26 @@ datasource db {
 }
 
 model Course {
-  id          String          @id @default(uuid())
-  userId      String
-  title       String          @db.Text
-  level       String?         
-  type        String?         
-  description String?         @db.Text
-  metaDescription String?     @db.Text
-  imageUrl    String?         @db.Text
-  price       Float?
-  isPublished Boolean         @default(false)
-  categoryId  String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  category    Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  attachments Attachment[]
-  chapters    Chapter[]
-  purchases   Purchase[]
+  id                String          @id @default(uuid())
+  userId            String
+  title             String          @db.Text
+  level             String?         
+  type              String?         
+  description       String?         @db.Text
+  metaDescription   String?     @db.Text
+  imageUrl          String?         @db.Text
+  price             Float?
+  language          String?
+  duration          String?
+  video             Boolean?
+  isPublished       Boolean         @default(false)
+  categoryId        String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  category          Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  attachments       Attachment[]
+  chapters          Chapter[]
+  purchases         Purchase[]
 
   @@index([categoryId])
   @@fulltext([title])
@@ -60,6 +63,7 @@ model Chapter {
   content      String?        @db.Text
   videoUrl     String?        @db.Text
   position     Int
+  duration     String?
   isPublished  Boolean        @default(false)
   isFree       Boolean        @default(false)
   courseId     String

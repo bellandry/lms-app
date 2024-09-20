@@ -1,9 +1,15 @@
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { CreateButtons } from "../_components/create-buttons";
 import { CreateSteps } from "../_components/create-steps";
 import { StepSwitch } from "../_components/step-switch";
 
 const CreateCoursePage = async () => {
+  const { userId } = auth();
+
+  if (!userId) return redirect("/");
+
   const categories = await db.category.findMany({
     orderBy: {
       name: "asc",
@@ -22,7 +28,7 @@ const CreateCoursePage = async () => {
         <div>
           <StepSwitch categories={categories} />
         </div>
-        <CreateButtons />
+        <CreateButtons userId={userId} />
       </div>
     </>
   );
