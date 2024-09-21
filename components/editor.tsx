@@ -136,6 +136,33 @@ function MyEditor({ value, onChange, readOnly = false }: EditorProps) {
     };
   }, [editor]);
 
+  let parsedValue: YooptaContentValue | undefined;
+
+  try {
+    parsedValue = value ? (JSON.parse(value) as YooptaContentValue) : undefined;
+  } catch (error) {
+    console.error("Invalid JSON, transforming to default object:", error);
+    parsedValue = {
+      "4b3ba4ab-90a1-49ba-80a9-dc9667ed4297": {
+        id: "4b3ba4ab-90a1-49ba-80a9-dc9667ed4297",
+        value: [
+          {
+            id: "6c85bd20-8ad0-42e9-a24e-0decd8fa7f49",
+            type: "paragraph",
+            children: [
+              {
+                text: value || "",
+              },
+            ],
+            props: { nodeType: "block" },
+          },
+        ],
+        type: "Paragraph",
+        meta: { order: 0, depth: 0 },
+      },
+    }; // Remplacez par un objet par défaut conforme à YooptaContentValue
+  }
+
   return (
     <div className="" ref={selectionRef}>
       <YooptaEditor
@@ -148,7 +175,7 @@ function MyEditor({ value, onChange, readOnly = false }: EditorProps) {
         autoFocus
         width={"100%"}
         readOnly={readOnly}
-        value={value ? (JSON.parse(value) as YooptaContentValue) : undefined} // Conversion explicite via 'unknown'
+        value={parsedValue} // Conversion explicite via 'unknown'
       />
     </div>
   );
