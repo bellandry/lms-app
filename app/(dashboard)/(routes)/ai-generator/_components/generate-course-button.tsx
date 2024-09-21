@@ -9,7 +9,7 @@ import { useState } from "react";
 type InputsType = {
   disabled: boolean;
   isLoading: boolean;
-  onClicked: () => void;
+  onLoading: (active: boolean) => void;
   inputs: {
     category: { id: string; name: string };
     subject: { subject: string; description: string };
@@ -27,7 +27,7 @@ export const GenerateCourseButton = ({
   inputs,
   disabled,
   isLoading,
-  onClicked,
+  onLoading,
 }: InputsType) => {
   const { userId } = useAuth();
   const [test, setTest] = useState(false);
@@ -49,7 +49,7 @@ export const GenerateCourseButton = ({
   };
 
   const GenerateCourseLayout = async () => {
-    onClicked();
+    onLoading(true);
     const BASIC_PROMPT = `Generate a course tutorial on following detail with field as course name, description, along with chapter name, about, duration:`;
     const USER_INPUT_PROMPT = `Category: '${inputs.category.name}', topic: '${inputs.subject.subject}', description: '${inputs.subject.description}', level: '${inputs.options.level}', duration: '${inputs.options.duration}' NoOf Chapters: ${inputs.options.chapters}, language: '${inputs.options.language}', just return in json and no more words or caracters`;
     const FINAL_PROMPT = `${BASIC_PROMPT} ${USER_INPUT_PROMPT}`;
@@ -58,15 +58,15 @@ export const GenerateCourseButton = ({
     const courseText = result.response?.text();
     if (courseText) {
       const parsedCourse = parseJSON(courseText);
-      console.log("gemini parsed :", parsedCourse);
+      console.log("gemini parsed :", parsedCourse.course);
       const saveCourse = await SaveAiCourse({
         userId: userId,
-        course: parsedCourse,
+        course: parsedCourse.course,
         categoryId: inputs.category.id,
       });
-      console.log(saveCourse);
+      console.log("saved: ", saveCourse);
     }
-    onClicked();
+    onLoading(false);
   };
   return (
     <Button disabled={disabled} onClick={() => GenerateCourseLayout()}>

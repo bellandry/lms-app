@@ -24,6 +24,10 @@ export const CreateButtons = ({ userId }: { userId: string }) => {
     );
   };
 
+  const changeIsLoading = (loading: boolean) => {
+    setIsLoading(loading);
+  };
+
   return (
     <div className="flex justify-between">
       <Button
@@ -46,7 +50,7 @@ export const CreateButtons = ({ userId }: { userId: string }) => {
             disabled={isActive() || isLoading}
             isLoading={isLoading}
             inputs={userCourseInput}
-            onClicked={() => setIsLoading(!isLoading)}
+            onLoading={changeIsLoading}
           />
         </>
       )}

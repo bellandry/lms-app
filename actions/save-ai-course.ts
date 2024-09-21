@@ -1,6 +1,8 @@
+"use server";
+
 import { db } from "@/lib/db";
 
-type AiCourseType = {
+export type AiCourseType = {
   userId: string;
   categoryId: string;
   course: {
@@ -25,7 +27,6 @@ export const SaveAiCourse = async ({
   categoryId,
 }: AiCourseType) => {
   try {
-    console.log("course : ", course);
     const createdCourse = await db.course.create({
       data: {
         userId,
@@ -36,6 +37,7 @@ export const SaveAiCourse = async ({
         level: course.level,
         language: course.language,
         duration: course.duration,
+        type: "ai-course",
       },
     });
 
@@ -45,26 +47,11 @@ export const SaveAiCourse = async ({
         description: chapter.about,
         duration: chapter.duration,
         courseId: createdCourse.id,
-        position: index,
+        position: index + 1,
       })),
     });
 
-    const completeCourse = await db.purchase.findMany({
-      where: {
-        id: createdCourse.id,
-        userId,
-      },
-      select: {
-        course: {
-          include: {
-            category: true,
-            chapters: true,
-          },
-        },
-      },
-    });
-
-    return completeCourse;
+    return createdCourse;
   } catch (error) {
     console.log("[SAVE_AI_COURSE]", error);
     return 0;
