@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { GenerateCourseModel } from "@/configs/ai-model";
 import { useAuth } from "@clerk/nextjs";
 import { LoaderCircle } from "lucide-react";
-import { redirect } from "next/navigation";
-import { useState } from "react";
+import { redirect, useRouter } from "next/navigation";
 
 type InputsType = {
   disabled: boolean;
@@ -30,7 +29,7 @@ export const GenerateCourseButton = ({
   onLoading,
 }: InputsType) => {
   const { userId } = useAuth();
-  const [test, setTest] = useState(false);
+  const router = useRouter();
 
   if (!userId) return redirect("/ai-generator");
 
@@ -64,7 +63,13 @@ export const GenerateCourseButton = ({
         course: parsedCourse.course,
         categoryId: inputs.category.id,
       });
-      console.log("saved: ", saveCourse);
+      if (
+        typeof saveCourse === "object" &&
+        saveCourse !== null &&
+        "id" in saveCourse
+      ) {
+        router.push(saveCourse.id);
+      }
     }
     onLoading(false);
   };

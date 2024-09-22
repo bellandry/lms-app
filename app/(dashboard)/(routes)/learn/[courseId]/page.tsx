@@ -95,6 +95,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                   isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
                   courseId={course.id}
                   isLocked={!chapter.isFree && !purchase}
+                  clickable
                 />
                 // </CarouselItem>
               ))}

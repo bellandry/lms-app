@@ -12,6 +12,7 @@ interface CourseChapterCardProps {
   courseId: string;
   isLocked: boolean;
   description?: string;
+  clickable?: boolean;
 }
 
 export const CourseChapterCard = ({
@@ -21,6 +22,7 @@ export const CourseChapterCard = ({
   isLocked,
   courseId,
   description,
+  clickable,
 }: CourseChapterCardProps) => {
   const pathName = usePathname();
   const router = useRouter();
@@ -29,7 +31,7 @@ export const CourseChapterCard = ({
   const isActive = pathName.includes(id);
 
   const onClick = () => {
-    router.push(`/course/${courseId}/chapter/${id}`);
+    clickable && router.push(`/course/${courseId}/chapter/${id}`);
   };
 
   return (
