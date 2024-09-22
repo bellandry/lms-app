@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { BookAIcon, BookOpen, TimerIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { CourseBanner } from "./_components/course-banner";
+import { CourseGenerateButton } from "./_components/course-generate-button";
 
 const page = async ({ params }: { params: { courseId: string } }) => {
   let { userId } = auth();
@@ -92,25 +93,22 @@ const page = async ({ params }: { params: { courseId: string } }) => {
               <li>Cours au format texte et/ou vidéo</li>
               <li>Partage de ressources et de codes</li>
             </ul>
-            {/* {!purchase && (
-            <CourseEnrollButton
+
+            <CourseGenerateButton
               variant="secondary"
               courseId={params.courseId}
               price={course.price ?? 0}
               className="hidden md:block"
             />
-          )} */}
           </div>
         </div>
       </div>
-      {/* {!purchase && (
-      <CourseEnrollButton
+      <CourseGenerateButton
         variant=""
         courseId={params.courseId}
         price={course.price ?? 0}
         className="sticky bottom-4 md:hidden w-full items-center mx-auto shadow-md shadow-slate-500"
       />
-    )} */}
     </div>
   );
 };
