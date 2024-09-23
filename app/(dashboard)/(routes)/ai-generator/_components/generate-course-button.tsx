@@ -68,7 +68,7 @@ export const GenerateCourseButton = ({
         saveCourse !== null &&
         "id" in saveCourse
       ) {
-        router.push(saveCourse.id);
+        router.push(`/ai-generator/create/${saveCourse.id}`);
       }
     }
     onLoading(false);

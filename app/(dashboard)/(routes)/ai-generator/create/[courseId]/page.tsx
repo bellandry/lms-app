@@ -96,7 +96,8 @@ const page = async ({ params }: { params: { courseId: string } }) => {
 
             <CourseGenerateButton
               variant="secondary"
-              courseId={params.courseId}
+              course={course}
+              chapters={course.chapters}
               price={course.price ?? 0}
               className="hidden md:block"
             />
@@ -105,7 +106,8 @@ const page = async ({ params }: { params: { courseId: string } }) => {
       </div>
       <CourseGenerateButton
         variant=""
-        courseId={params.courseId}
+        course={course}
+        chapters={course.chapters}
         price={course.price ?? 0}
         className="sticky bottom-4 md:hidden w-full items-center mx-auto shadow-md shadow-slate-500"
       />
