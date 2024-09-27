@@ -59,13 +59,15 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     <div className="w-full flex flex-col md:flex-row justify-evenly lg:px-32 max-w-[1400px] mx-auto pb-4">
       <div className="flex flex-col w-full h-fit md:w-3/5 mx-auto p-1 md:m-2 gap-2 border rounded-lg mb-4 pb-4">
         <div className="relative w-full h-52">
-          <Image
-            src={course.imageUrl!}
-            alt="Dynamic Background"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-sm"
-          />
+          {course.imageUrl && (
+            <Image
+              src={course.imageUrl}
+              alt="Dynamic Background"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-sm"
+            />
+          )}
           <div className="absolute flex-col inset-0 flex items-center justify-center bg-slate-900 bg-opacity-60 px-4 rounded-md">
             <h1 className="text-white text-2xl md:text-3xl font-bold">
               {course.title}

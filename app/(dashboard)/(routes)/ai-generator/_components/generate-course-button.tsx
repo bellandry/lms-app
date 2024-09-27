@@ -1,6 +1,7 @@
 import { SaveAiCourse } from "@/actions/save-ai-course";
 import { Button } from "@/components/ui/button";
 import { GenerateCourseModel } from "@/configs/ai-model";
+import { parseJSON } from "@/constants";
 import { useAuth } from "@clerk/nextjs";
 import { LoaderCircle } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
@@ -33,34 +34,20 @@ export const GenerateCourseButton = ({
 
   if (!userId) return redirect("/ai-generator");
 
-  const parseJSON = (text: string) => {
-    let jsonResponse;
-    try {
-      jsonResponse = JSON.parse(text);
-    } catch (error) {
-      const cleanedText = text.replace(
-        /^\s*json\s*|^\s*[^{}[\],":\s]*|[^{}[\],":\s]*$/g,
-        ""
-      );
-      jsonResponse = JSON.parse(cleanedText);
-    }
-    return jsonResponse;
-  };
-
   const GenerateCourseLayout = async () => {
     onLoading(true);
     const BASIC_PROMPT = `Generate a course tutorial on following detail with field as course name, description, along with chapter name, about, duration:`;
-    const USER_INPUT_PROMPT = `Category: '${inputs.category.name}', topic: '${inputs.subject.subject}', description: '${inputs.subject.description}', level: '${inputs.options.level}', duration: '${inputs.options.duration}' NoOf Chapters: ${inputs.options.chapters}, language: '${inputs.options.language}', just return in json and no more words or caracters`;
+    const USER_INPUT_PROMPT = `Category: '${inputs.category.name}', topic: '${inputs.subject.subject}', description: '${inputs.subject.description}', level: '${inputs.options.level}', duration: '${inputs.options.duration}' NoOf Chapters: ${inputs.options.chapters}, language: '${inputs.options.language}', don't add chapter if it possibly have safety content issue. Just return in json and no more words or caracters`;
     const FINAL_PROMPT = `${BASIC_PROMPT} ${USER_INPUT_PROMPT}`;
 
     const result = await GenerateCourseModel.sendMessage(FINAL_PROMPT);
     const courseText = result.response?.text();
     if (courseText) {
       const parsedCourse = parseJSON(courseText);
-      console.log("gemini parsed :", parsedCourse.course);
+      // console.log(parsedCourse);
       const saveCourse = await SaveAiCourse({
         userId: userId,
-        course: parsedCourse.course,
+        course: parsedCourse.course ? parsedCourse.course : parsedCourse,
         categoryId: inputs.category.id,
       });
       if (

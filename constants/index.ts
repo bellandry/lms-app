@@ -60,7 +60,7 @@ export const ContentHeading = ({
   value: string;
   uid: string;
 }) => {
-  return `{
+  return `
       "9d98408d-b990-4ffc-${uid}-387084291b00": {
         "id": "9d98408d-b990-4ffc-${uid}-387084291b00",
         "value": [
@@ -83,7 +83,7 @@ export const ContentHeading = ({
             "depth": 0
         }
       },
-    }`;
+    `;
 };
 
 export const BulletedListItem = ({
@@ -93,7 +93,7 @@ export const BulletedListItem = ({
   item: string;
   index: number;
 }) => {
-  return `{
+  return `
       "128d0660-6cc8-4f6a-be${index}a-ecb48cc7e9ce": {
         "id": "128d0660-6cc8-4f6a-be${index}a-ecb48cc7e9ce",
         "value": [
@@ -115,9 +115,17 @@ export const BulletedListItem = ({
             "order": 5,
             "depth": 0
         }
-      }
-    }`;
+      },
+    `;
 };
+
+function escapeForJSON(input: string): string {
+  return input
+    .replace(/\\/g, "\\\\") // Échapper les backslashes
+    .replace(/"/g, '\\"') // Échapper les guillemets doubles
+    .replace(/\n/g, "\\n") // Échapper les sauts de ligne
+    .replace(/```/g, ""); // Supprimer les backticks triples
+}
 
 export const codeContent = ({
   value,
@@ -129,7 +137,6 @@ export const codeContent = ({
   language: string;
 }) => {
   return `
-      {
         "ad15458a-10c9-41fa-819${index}-e86e393fc9d6": {
           "id": "ad15458a-10c9-41fa-819${index}-e86e393fc9d6",
           "value": [
@@ -138,7 +145,7 @@ export const codeContent = ({
                   "type": "code",
                   "children": [
                       {
-                          "text": "${value} {\n  const editor = useMemo(() => createYooptaEditor(), []);\n\n  return (\n    <div>\n      <YooptaEditor\n        editor={editor}\n        plugins={plugins}\n        tools={TOOLS}\n        marks={MARKS}\n      />\n    </div>\n  );\n}"
+                          "text": "${escapeForJSON(value)}"
                       }
                   ],
                   "props": {
@@ -153,7 +160,6 @@ export const codeContent = ({
               "order": 7,
               "depth": 1
           }
-        }
-      }
+        },
     `;
 };

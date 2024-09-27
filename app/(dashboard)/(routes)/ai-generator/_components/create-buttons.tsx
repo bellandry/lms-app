@@ -10,6 +10,7 @@ export const CreateButtons = ({ userId }: { userId: string }) => {
   const { activeIndex, setActiveIndex } = useActiveIndexStore();
   const { userCourseInput, setUserCourseInput } = useUserCourseInputStore();
   const [isLoading, setIsLoading] = useState(false);
+  console.log("81baa229-37da-4b40-a6f2-6d3473d1958e");
 
   const isActive = (): boolean => {
     const { category, subject, options } = userCourseInput; // Déstructuration pour plus de clarté

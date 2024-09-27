@@ -15,8 +15,9 @@ model Course {
   title             String          @db.Text
   level             String?         
   type              String?         
+  topic             String?         
   description       String?         @db.Text
-  metaDescription   String?     @db.Text
+  metaDescription   String?         @db.Text
   imageUrl          String?         @db.Text
   price             Float?
   language          String?

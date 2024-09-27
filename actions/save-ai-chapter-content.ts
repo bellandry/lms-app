@@ -6,6 +6,7 @@ import {
   ContentHeading,
   pascalToSlug,
 } from "@/constants";
+import { db } from "@/lib/db";
 import { randomInt } from "crypto";
 
 type SaveAiChapterContentType = {
@@ -29,73 +30,94 @@ export const SaveAiChapterContent = async ({
   userId,
   courseId,
 }: SaveAiChapterContentType) => {
-  console.log(contents);
-
   try {
-    const transaction = contents.forEach((chapter) => {
-      let content = {};
-      chapter.content.descriptions.forEach((description, index) => {
+    const transaction = contents.map((chapter) => {
+      let content = `{`;
+      chapter.content.descriptions.map((description, index) => {
         if (
           description.type === "HeadingOne" ||
           description.type === "HeadingTwo" ||
           description.type === "HeadingThree" ||
           description.type === "Paragraph"
         ) {
-          Object.assign(
-            content,
-            JSON.parse(
-              ContentHeading({
-                type: description.type,
-                slug: pascalToSlug(description.type),
-                value:
-                  typeof description.content === "string"
-                    ? description.content
-                    : "",
-                uid: `a1d${index}`,
-              })
-            )
-          );
+          content += ContentHeading({
+            type: description.type,
+            slug: pascalToSlug(description.type),
+            value:
+              typeof description.content === "string"
+                ? description.content
+                : "",
+            uid: `a1d${index}`,
+          });
         }
 
         if (description.type === "BulletedList") {
           if (Array.isArray(description.content)) {
-            description.content.forEach((item, index) =>
-              Object.assign(
-                content,
-                JSON.parse(
-                  BulletedListItem({ item: item.content!, index: index })
-                )
-              )
+            description.content.forEach(
+              (item, index) =>
+                (content += BulletedListItem({
+                  item: item.content!,
+                  index: index,
+                }))
             );
           }
         }
 
         if (description.type === "Code") {
-          Object.assign(
-            content,
-            JSON.parse(
-              codeContent({
-                value:
-                  typeof description.content === "string"
-                    ? description.content
-                    : "",
-                index: randomInt(0, 9),
-                language: description.language!,
-              })
-            )
-          );
+          content += codeContent({
+            value:
+              typeof description.content === "string"
+                ? description.content
+                : "",
+            index: randomInt(0, 9),
+            language: description.language!,
+          });
         }
       });
-      console.log(content);
-      // db.chapter.update({
-      //   where: {
-      //     id: chapter.chapterId,
-      //   },
-      //   data: {
-      //     content,
-      //   },
-      // });
+      content += `}`;
+      content = content.replace(/,\s*}/, "}");
+
+      return db.chapter.update({
+        where: {
+          id: chapter.chapterId,
+        },
+        data: {
+          content,
+          isPublished: true,
+        },
+      });
     });
+
+    await db.$transaction(transaction);
+
+    await db.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        isPublished: true,
+      },
+    });
+
+    const purchase = await db.purchase.findUnique({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId,
+        },
+      },
+    });
+    if (purchase) {
+      return { message: "Déjà acheté", status: 400 };
+    }
+    const purchaseCourse = await db.purchase.create({
+      data: {
+        userId,
+        courseId,
+      },
+    });
+
+    return purchaseCourse;
   } catch (error) {
     console.log("[SAVE_AI_CHAPTER_CONTENT]", error);
     return 0;
