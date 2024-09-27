@@ -16,6 +16,7 @@ type SaveAiChapterContentType = {
       title: string;
       descriptions: {
         content: string | { content?: string; type?: string }[];
+        items?: string[];
         type: string;
         language?: string;
       }[];
@@ -48,6 +49,7 @@ export const SaveAiChapterContent = async ({
                 ? description.content
                 : "",
             uid: `a1d${index}`,
+            index: index,
           });
         }
 
@@ -57,7 +59,27 @@ export const SaveAiChapterContent = async ({
               (item, index) =>
                 (content += BulletedListItem({
                   item: item.content!,
-                  index: index,
+                  index: randomInt(0, 9),
+                }))
+            );
+          }
+
+          if (Array.isArray(description.items)) {
+            content += ContentHeading({
+              type: "Paragraph",
+              slug: "paragraph",
+              value:
+                typeof description.content === "string"
+                  ? description.content
+                  : "",
+              uid: `a1d${index}`,
+              index: index,
+            });
+            description.items.forEach(
+              (item, i) =>
+                (content += BulletedListItem({
+                  item: item,
+                  index: index + 1 + i,
                 }))
             );
           }
@@ -69,7 +91,7 @@ export const SaveAiChapterContent = async ({
               typeof description.content === "string"
                 ? description.content
                 : "",
-            index: randomInt(0, 9),
+            index: index,
             language: description.language!,
           });
         }

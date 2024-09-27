@@ -36,14 +36,22 @@ export const parseJSON = (text: string) => {
   try {
     jsonResponse = JSON.parse(text);
   } catch (error) {
-    const cleanedText = text.replace(
-      /^\s*json\s*|^\s*[^{}[\],":\s]*|[^{}[\],":\s]*$/g,
-      ""
-    );
+    const cleanedText = text
+      .replace(/^\s*json\s*|^\s*[^{}[\],":\s]*|[^{}[\],":\s]*$/g, "")
+      .replace(/\s+$/, "")
+      .trim();
     jsonResponse = JSON.parse(cleanedText);
   }
   return jsonResponse;
 };
+
+export function escapeForJSON(input: string): string {
+  return input
+    .replace(/\\/g, "\\\\") // Échapper les backslashes
+    .replace(/"/g, '\\"') // Échapper les guillemets doubles
+    .replace(/\n/g, "\\n") // Échapper les sauts de ligne
+    .replace(/```/g, ""); // Supprimer les backticks triples
+}
 
 export const pascalToSlug = (input: string): string => {
   return input.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
@@ -54,11 +62,13 @@ export const ContentHeading = ({
   slug,
   value,
   uid,
+  index,
 }: {
   type: string;
   slug: string;
   value: string;
   uid: string;
+  index: number;
 }) => {
   return `
       "9d98408d-b990-4ffc-${uid}-387084291b00": {
@@ -69,7 +79,7 @@ export const ContentHeading = ({
                 "type": "${slug}",
                 "children": [
                     {
-                        "text": "${value}"
+                        "text": "${escapeForJSON(value)}"
                     }
                 ],
                 "props": {
@@ -79,7 +89,7 @@ export const ContentHeading = ({
         ],
         "type": "${type}",
         "meta": {
-            "order": 0,
+            "order": ${index},
             "depth": 0
         }
       },
@@ -102,7 +112,7 @@ export const BulletedListItem = ({
                 "type": "bulleted-list",
                 "children": [
                     {
-                        "text": "${item}"
+                        "text": "${escapeForJSON(item)}"
                     }
                 ],
                 "props": {
@@ -112,20 +122,12 @@ export const BulletedListItem = ({
         ],
         "type": "BulletedList",
         "meta": {
-            "order": 5,
+            "order": ${index},
             "depth": 0
         }
       },
     `;
 };
-
-function escapeForJSON(input: string): string {
-  return input
-    .replace(/\\/g, "\\\\") // Échapper les backslashes
-    .replace(/"/g, '\\"') // Échapper les guillemets doubles
-    .replace(/\n/g, "\\n") // Échapper les sauts de ligne
-    .replace(/```/g, ""); // Supprimer les backticks triples
-}
 
 export const codeContent = ({
   value,
@@ -157,7 +159,7 @@ export const codeContent = ({
           ],
           "type": "Code",
           "meta": {
-              "order": 7,
+              "order": ${index},
               "depth": 1
           }
         },

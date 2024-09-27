@@ -5,6 +5,7 @@ import { parseJSON } from "@/constants";
 import { useAuth } from "@clerk/nextjs";
 import { LoaderCircle } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type InputsType = {
   disabled: boolean;
@@ -39,26 +40,31 @@ export const GenerateCourseButton = ({
     const BASIC_PROMPT = `Generate a course tutorial on following detail with field as course name, description, along with chapter name, about, duration:`;
     const USER_INPUT_PROMPT = `Category: '${inputs.category.name}', topic: '${inputs.subject.subject}', description: '${inputs.subject.description}', level: '${inputs.options.level}', duration: '${inputs.options.duration}' NoOf Chapters: ${inputs.options.chapters}, language: '${inputs.options.language}', don't add chapter if it possibly have safety content issue. Just return in json and no more words or caracters`;
     const FINAL_PROMPT = `${BASIC_PROMPT} ${USER_INPUT_PROMPT}`;
+    try {
+      const result = await GenerateCourseModel.sendMessage(FINAL_PROMPT);
+      const courseText = result.response?.text();
+      if (courseText) {
+        const parsedCourse = parseJSON(courseText);
 
-    const result = await GenerateCourseModel.sendMessage(FINAL_PROMPT);
-    const courseText = result.response?.text();
-    if (courseText) {
-      const parsedCourse = parseJSON(courseText);
-      // console.log(parsedCourse);
-      const saveCourse = await SaveAiCourse({
-        userId: userId,
-        course: parsedCourse.course ? parsedCourse.course : parsedCourse,
-        categoryId: inputs.category.id,
-      });
-      if (
-        typeof saveCourse === "object" &&
-        saveCourse !== null &&
-        "id" in saveCourse
-      ) {
-        router.push(`/ai-generator/create/${saveCourse.id}`);
+        const saveCourse = await SaveAiCourse({
+          userId: userId,
+          course: parsedCourse.course ? parsedCourse.course : parsedCourse,
+          categoryId: inputs.category.id,
+        });
+        if (
+          typeof saveCourse === "object" &&
+          saveCourse !== null &&
+          "id" in saveCourse
+        ) {
+          router.push(`/ai-generator/create/${saveCourse.id}`);
+        }
       }
+    } catch (error) {
+      toast.error("Une erreur inatendue s'est produite, Réessayez plus tard");
+      console.log("[GEMINI] ", error);
+    } finally {
+      onLoading(false);
     }
-    onLoading(false);
   };
   return (
     <Button disabled={disabled} onClick={() => GenerateCourseLayout()}>

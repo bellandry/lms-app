@@ -55,11 +55,10 @@ export const CourseGenerateButton = ({
           'BulletedList' for a lists and all items of the list in a field called 'items'. 
           language: '${course.language}'. don't forget to always escape special characters like slashes to give clean and valid JSON with no errors 
           and avoid unterminated JSON string. don't use decoration like * in text and answer all in one line. `;
-          console.log(PROMPT);
+          // console.log(PROMPT);
 
           const result = await GenerateCourseContent.sendMessage(PROMPT);
-          const chapterText = result.response?.text();
-          console.log("chapitre " + chapters.indexOf(chapter), chapterText);
+          const chapterText = result.response?.text().trim();
 
           if (chapterText) {
             const parsedChapterContent = parseJSON(chapterText);
@@ -72,7 +71,7 @@ export const CourseGenerateButton = ({
             contents.push(chapterContent);
           }
 
-          console.log("contents :", contents);
+          // console.log("contents :", contents);
 
           await sleep(2000);
         }
@@ -93,7 +92,7 @@ export const CourseGenerateButton = ({
         window.location.assign(response.data.url);
       }
     } catch (error) {
-      toast.error("Une erreur inatendue s'est produite");
+      toast.error("Une erreur inatendue s'est produite, Réessayez plus tard!");
       console.log("[AI_CREATION_ERROR] : ", error);
     } finally {
       setIsLoading(false);
@@ -111,13 +110,15 @@ export const CourseGenerateButton = ({
           | "outline"
           | "ghost"
       }
-      className={`w-full flex gap-2 items-center justify-center md:w-auto ${className}`}
+      className={`w-full md:w-auto ${className}`}
       onClick={onClick}
       disabled={isLoading}
       size={"lg"}
     >
-      {isLoading && <LoaderCircle className="size-6 animate-spin" />}
-      <span>Générer le contenu du cours</span>
+      <span className="w-full flex gap-2 items-center justify-center">
+        {isLoading && <LoaderCircle className="size-6 animate-spin" />}
+        <span>Générer le contenu du cours</span>
+      </span>
     </Button>
   );
 };
