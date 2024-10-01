@@ -18,6 +18,9 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (!userId) userId = "";
 
   const categories = await db.category.findMany({
+    where: {
+      enable: true,
+    },
     orderBy: {
       name: "asc",
     },

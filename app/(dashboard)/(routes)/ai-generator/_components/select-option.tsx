@@ -48,7 +48,14 @@ const SelectOption = () => {
             <SelectContent>
               <SelectItem value="beginner">Facile</SelectItem>
               <SelectItem value="intermediate">Moyen</SelectItem>
-              <SelectItem value="advance ">Difficile</SelectItem>
+              <SelectItem disabled={true} value="advanced">
+                <span className="flex gap-14 justify-between items-center">
+                  <span className="w-fit">Avancé</span>
+                  <span className="font-bold flex items-center gap-2 ml-auto py-1 px-3 bg-blue-700/20 rounded-full">
+                    <Crown className="size-3" /> PRO
+                  </span>
+                </span>
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -85,8 +92,15 @@ const SelectOption = () => {
               <SelectValue placeholder="Inclure des vidéos ?" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="true">Oui</SelectItem>
               <SelectItem value="false">Non</SelectItem>
+              <SelectItem disabled={true} value="true">
+                <span className="flex gap-14 justify-between items-center">
+                  <span className="w-fit">Oui</span>
+                  <span className="font-bold flex items-center gap-2 ml-auto py-1 px-3 bg-blue-700/20 rounded-full">
+                    <Crown className="size-3" /> PRO
+                  </span>
+                </span>
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -95,6 +109,8 @@ const SelectOption = () => {
           <Input
             type="number"
             id="chapters"
+            max="6"
+            min="1"
             value={userCourseInput.options.chapters}
             onChange={handleChapters("chapters")}
           />

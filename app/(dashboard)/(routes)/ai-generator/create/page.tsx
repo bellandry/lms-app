@@ -11,6 +11,10 @@ const CreateCoursePage = async () => {
   if (!userId) return redirect("/");
 
   const categories = await db.category.findMany({
+    where: {
+      enable: true,
+      isAiGeneration: true,
+    },
     orderBy: {
       name: "asc",
     },

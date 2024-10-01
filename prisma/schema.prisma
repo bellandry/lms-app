@@ -52,9 +52,11 @@ model Attachment {
 }
 
 model Category {
-  id      String   @id @default(uuid())
-  name    String   @unique
-  courses Course[]
+  id              String   @id @default(uuid())
+  name            String   @unique
+  enable          Boolean?
+  isAiGeneration  Boolean? @default(false)
+  courses         Course[]
 }
 
 model Chapter {
