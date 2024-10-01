@@ -20,13 +20,20 @@ export const CourseBanner = ({ course }: CourseBannerProps) => {
   return !editImage ? (
     <div className="relative w-full h-52">
       <div>
-        {course.imageUrl && (
+        {course.imageUrl ? (
           <Image
             src={course.imageUrl!}
             alt="Dynamic Background"
             layout="fill"
             objectFit="cover"
             className="rounded-sm"
+          />
+        ) : (
+          <Image
+            fill
+            className="object-cover"
+            alt={"default background course"}
+            src={"/learning-concept.avif"}
           />
         )}
         <div className="absolute flex-col inset-0 flex items-center justify-center bg-slate-900 bg-opacity-60 px-4 rounded-md">

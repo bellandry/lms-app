@@ -31,8 +31,15 @@ export const CourseCard = ({
     <Link href={`/learn/${id}`}>
       <div className="group hover:shadow-md transition overflow-hidden border rounded-lg h-full">
         <div className="relative w-full aspect-video overflow-hidden">
-          {imageUrl && (
+          {imageUrl ? (
             <Image fill className="object-cover" alt={title} src={imageUrl} />
+          ) : (
+            <Image
+              fill
+              className="object-cover"
+              alt={title}
+              src={"/learning-concept.avif"}
+            />
           )}
         </div>
         <div className="flex flex-col p-3">
