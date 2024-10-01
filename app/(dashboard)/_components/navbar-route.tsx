@@ -9,16 +9,19 @@ const guestRoutes = [
     icon: Layout,
     label: "Accueil",
     href: "/",
+    badge: false,
   },
   {
     icon: Compass,
     label: "Explorer",
     href: "/search",
+    badge: false,
   },
   {
     icon: Bot,
     label: "Générer un cours",
     href: "/ai-generator",
+    badge: true,
   },
 ];
 
@@ -27,11 +30,13 @@ const teacherRoute = [
     icon: List,
     label: "Mes cours",
     href: "/teacher/courses",
+    badge: false,
   },
   {
     icon: BarChart,
     label: "Analytics",
     href: "/teacher/analytics",
+    badge: false,
   },
 ];
 
@@ -51,6 +56,7 @@ export const NavbarRoute = () => {
             icone={route.icon}
             label={route.label}
             href={route.href}
+            badge={route.badge!}
           />
         ))}
       </div>

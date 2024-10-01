@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsOpenStore } from "@/hooks/use-isopen-store";
 import { cn } from "@/lib/utils";
 import { CheckCircle, Lock, PlayCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,12 +22,14 @@ export const CourseSidebarItem = ({
 }: CourseSidebarItemProps) => {
   const pathName = usePathname();
   const router = useRouter();
+  const { isOpen, setIsOpen } = useIsOpenStore();
 
   const Icon = isLocked ? Lock : isCompleted ? CheckCircle : PlayCircle;
   const isActive = pathName.includes(id);
 
   const onClick = () => {
     router.push(`/course/${courseId}/chapter/${id}`);
+    if (isOpen) setIsOpen();
   };
 
   return (

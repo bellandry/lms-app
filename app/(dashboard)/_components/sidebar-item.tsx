@@ -9,9 +9,15 @@ interface SidebarItemProps {
   icone: LucideIcon;
   label: string;
   href: string;
+  badge?: boolean;
 }
 
-export const SidebarItem = ({ icone: Icon, label, href }: SidebarItemProps) => {
+export const SidebarItem = ({
+  icone: Icon,
+  label,
+  href,
+  badge,
+}: SidebarItemProps) => {
   const pathName = usePathname();
   const router = useRouter();
   const { isOpen, setIsOpen } = useIsOpenStore();
@@ -36,7 +42,7 @@ export const SidebarItem = ({ icone: Icon, label, href }: SidebarItemProps) => {
     >
       <div
         className={cn(
-          "h-full w-full flex items-center gap-x-2 rounded-md p-3 hover:text-slate-600 hover:bg-slate-300/20",
+          "relative h-full w-full flex items-center gap-x-2 rounded-md p-3 hover:text-slate-600 hover:bg-slate-300/20",
           isActive &&
             "text-sky-700 bg-sky-200/20 hover:bg-sky-200/20 hover:text-sky-700"
         )}
@@ -46,6 +52,9 @@ export const SidebarItem = ({ icone: Icon, label, href }: SidebarItemProps) => {
           className={cn("text-slate-500", isActive && "text-sky-700")}
         />
         {label}
+        {badge && (
+          <span className="absolute bg-yellow-600 size-3 top-2 right-0 rounded-full animate-ping"></span>
+        )}
       </div>
     </button>
   );

@@ -1,5 +1,15 @@
 import { Category } from "@prisma/client";
-import { Map, Paperclip, SquareActivity } from "lucide-react";
+import {
+  BarChart,
+  Bot,
+  Compass,
+  Layout,
+  List,
+  ListEnd,
+  Map,
+  Paperclip,
+  SquareActivity,
+} from "lucide-react";
 import { IconType } from "react-icons";
 import {
   FcCircuit,
@@ -12,6 +22,48 @@ import {
   FcMultipleSmartphones,
   FcMusic,
 } from "react-icons/fc";
+
+export const guestRoutes = [
+  {
+    icon: Layout,
+    label: "Accueil",
+    href: "/",
+    badge: false,
+  },
+  {
+    icon: Compass,
+    label: "Explorer",
+    href: "/search",
+    badge: false,
+  },
+  {
+    icon: Bot,
+    label: "Générer un cours",
+    href: "/ai-generator",
+    badge: true,
+  },
+];
+
+export const teacherRoute = [
+  {
+    icon: List,
+    label: "Mes cours",
+    href: "/teacher/courses",
+    badge: false,
+  },
+  {
+    icon: BarChart,
+    label: "Analytics",
+    href: "/teacher/analytics",
+    badge: false,
+  },
+  {
+    icon: ListEnd,
+    label: "Catégories",
+    href: "/teacher/category",
+    badge: false,
+  },
+];
 
 export const StepperOptions = [
   { id: 0, name: "Catégorie", icon: SquareActivity },

@@ -10,7 +10,7 @@ const SelectCategory = async ({ categories }: SelectCategoryProps) => {
       <h2 className="text-xl font-semibold">
         Choisissez la catégorie de votre cours
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 w-full mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 w-full">
         {categories.map((category) => {
           return (
             <CategoryCard

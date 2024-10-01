@@ -1,45 +1,8 @@
 "use client";
 
-import { BarChart, Bot, Compass, Layout, List, ListEnd } from "lucide-react";
-
+import { guestRoutes, teacherRoute } from "@/constants";
 import { usePathname } from "next/navigation";
 import { SidebarItem } from "./sidebar-item";
-
-const guestRoutes = [
-  {
-    icon: Layout,
-    label: "Accueil",
-    href: "/",
-  },
-  {
-    icon: Compass,
-    label: "Explorer",
-    href: "/search",
-  },
-  {
-    icon: Bot,
-    label: "Générer un cours",
-    href: "/ai-generator",
-  },
-];
-
-const teacherRoute = [
-  {
-    icon: List,
-    label: "Mes cours",
-    href: "/teacher/courses",
-  },
-  {
-    icon: BarChart,
-    label: "Analytics",
-    href: "/teacher/analytics",
-  },
-  {
-    icon: ListEnd,
-    label: "Catégories",
-    href: "/teacher/category",
-  },
-];
 
 export const SidebarRoutes = () => {
   const pathName = usePathname();
@@ -56,6 +19,7 @@ export const SidebarRoutes = () => {
           icone={route.icon}
           label={route.label}
           href={route.href}
+          badge={route.badge}
         />
       ))}
     </div>
