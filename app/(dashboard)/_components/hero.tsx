@@ -17,9 +17,9 @@ export const HeroSection = () => {
 
         <div className="relative md:container mx-auto w-full px-4 py-32 sm:px-6 lg:flex lg:h lg:items-center lg:px-8">
           <div className="text-center items-center w-full sm:text-left flex flex-col gap-6 sm:gap-2">
-            <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
+            <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl flex flex-col gap-4">
               Apprend gratuitement
-              <span className="block font-extrabold text-blue-500">
+              <span className="block font-extrabold bg-gradient-to-tr from-slate-300 via-slate-500 to-blue-100 bg-clip-text text-transparent">
                 {" "}
                 Le développement Web{" "}
               </span>

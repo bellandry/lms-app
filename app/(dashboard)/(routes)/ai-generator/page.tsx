@@ -18,15 +18,21 @@ const AiGeneratorHome = () => {
           </p>
           <AlertCircleIcon size={60} className="text-yellow-500 mx-auto mt-4" />
           <p className="mx-auto mt-4 max-w-xl text-2xl text-yellow-500">
-            Cette fonctionnalité est encore en cours de développement
+            Cette fonctionnalité est dans sa phase de test, si vous rencontrez
+            des problèmes contactez le webmaster en ajoutant une capture d'écran
+            à votre message.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
-              className="block w-full rounded border border-slate-800 bg-slate-800 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-slate-800 focus:outline-none focus:ring active:text-opacity-75 sm:w-auto transition-all"
-              href="/"
+              className="relative block w-full rounded-xl border border-slate-800 bg-slate-800 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-slate-800 focus:outline-none focus:ring active:text-opacity-75 sm:w-auto transition-all"
+              href="/ai-generator/create"
             >
-              Retour à l&apos;accueil
+              Générer un cours{" "}
+              <span className="text-yellow-500 top-1 animate-pulse">
+                ( Béta ){" "}
+              </span>
+              <span className="h-3 w-3 absolute rounded-full bg-yellow-600 animate-ping" />
             </Link>
           </div>
         </div>
